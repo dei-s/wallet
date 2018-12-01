@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 
 <!--
 /******************************************************************************
@@ -16,15 +17,14 @@
 ******************************************************************************/
 -->
 
-<!DOCTYPE html>
 <html ng-app="app" ng-csp>
 <head>
-  <meta charset="utf-8">
-  <title>МИР | Waves Blockchain</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/mir.css">
-
-  <link href="img/favicon.png" type="image/x-icon" rel="shortcut icon">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/png" href="img/favicon.png">
+<link rel="stylesheet" href="css/dei.css">
+<link rel="stylesheet" href="css/dei-community.css">
+<title>DEI | Waves Blockchain</title>
 </head>
 
 <body ng-controller="homeController as home" ng-switch on="home.screen">
@@ -391,7 +391,7 @@
               tooltipster
               tooltip-html
               tooltip-theme="tooltipster-theme3"
-              tooltip-title="<center><u>Community tab</u></center><br/>Resources to learn more about Waves project such as <br/>forums, blogs, websites, etc."></span>
+              tooltip-title="<center><u>Community tab</u></center><br/>Resources to learn more about Digital Economy as <br/>wall address: 3PEPpJoJNqrU6T6AAdXB3yMzUseEaUPniCw."></span>
       </div>
     </section>
 
@@ -629,6 +629,22 @@
               <h2 class="sectionHeader">TURKISH LIRA</h2>
               <p class="dialog-text">Please visit <a href="https://www.digilira.com/" target="_blank">Digilira</a> gateway.</p>
               <p class="dialog-text">You can only use Turkish Lira gateway if you have Turkish citizenship.</p>
+            </div>
+          </div>
+
+          <div class="noDisp">
+            <div id="dei-dialog" waves-dialog ok-button-caption="CLOSE" cancel-button-visible="false">
+              <h2 class="sectionHeader">DEI</h2>
+              <p class="dialog-text">Please visit <a href="https://dei.su" target="_blank">Dei</a> gateway.</p>
+              <p class="dialog-text">You can only use Dei gateway.</p>
+            </div>
+          </div>
+
+          <div class="noDisp">
+            <div id="libre-dialog" waves-dialog ok-button-caption="CLOSE" cancel-button-visible="false">
+              <h2 class="sectionHeader">LIBRE</h2>
+              <p class="dialog-text">Please visit <a href="https://libre.center" target="_blank">Libre</a> gateway.</p>
+              <p class="dialog-text">You can only use Libre gateway.</p>
             </div>
           </div>
 
@@ -1246,48 +1262,40 @@
 
         <!-- COMMUNITY TAB -->
         <div id="mBB-community" class="mBB-content" ng-switch-when="community" ng-controller="communityController as community">
-          <!-- Temporary -->
-          <p>DISCLAIMER: The Community tab will temporarily hold block information for testing purposes. After alpha phase this data  will be relocated inside the Preferences - Advanced area.</p>
-          <h2 class="sectionHeader">LATEST BLOCKS INFORMATION</h2>
-          <p class="centerIt">
-          <div id="latestBlocks" class="wavesTable wScroll" >
-            <table>
-              <thead>
-              <tr class="fade">
-                <td>HEIGHT</td>
-                <td>DATE</td>
-                <td>TRANSACTIONS</td>
-                <td>GENERATOR</td>
-              </tr>
-              </thead>
-              <tbody id="latestBlocksTable">
-              <tr class="fade">
-                <td>{{community.candidate.block}}</td>
-                <td><i>incoming</i></td>
-                <td>{{community.candidate.size}}</td>
-                <td><i>unconfirmed</i></td>
-              </tr>
-              <tr class="fade" ng-repeat="block in community.blocks | orderBy:'timestamp':true">
-                <td>{{block.height}}</td>
-                <td>{{block.timestamp | formatting}}</td>
-                <td>{{block.transactions.length}}</td>
-                <td>
-                  <span class="clipSpan" tooltipster tooltip-theme="tooltipster-theme1" ngclipboard title="Copy this address to the clipboard." data-clipboard-text="{{block.generator}}" ngclipboard-success="clipboardOk()">{{block.generator}}</span>
-                </td>
-              </tr>
-              </tbody>
-            </table>
+          <h2 class="sectionHeader">LATEST MESSAGE TO ALIASE DIGITALECONOMY</h2>
+          <div id="app" class="flex-item">
+            <div class="msg-wrapper flex-item bordered" ref="msgWrapper">
+              <table id="msg-list">
+                <tr v-for="msg in messages">
+                  <td>
+                    {{ formatTime(msg.time)}}
+                  </td>
+                  <td>
+                    <a :href="'https://wavesexplorer.com/tx/' + msg.id">{{ formatSender(msg.sender) }}</a>:
+                  </td>
+                  <td>
+                    {{ msg.text }} ({{ (msg.amount / 100000000).toLocaleString('ru-ru', {maximumSignificantDigits: 20}) }} МИР)
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
-
-          </p>
+          <div class="flex-row info bordered">
+          </div>
         </div>
         <!-- /COMMUNITY TAB -->
+
       </section>
     </section>
-  </div>
+  </div> <!-- navigationContainer -->
 </div> <!-- Wrapper div END -->
 
-<script src="js/mir.js"></script>
+<script src="js/dei.js"></script>
+<!-- community -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
+<script src="https://unpkg.com/base-58@0.0.1/Base58.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/dei-community.js"></script>
 
 
 </body>
