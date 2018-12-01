@@ -9248,8 +9248,8 @@ var OrderPrice = (function () {
         emptyDataFields();
 
         var favoritePairs = [
-			{ amountAsset: Currency.WAVES, priceAsset: Currency.DEIP }
-			{ amountAsset: Currency.WAVES, priceAsset: Currency.LIBRE }
+			{ amountAsset: Currency.WAVES, priceAsset: Currency.DEIP },
+			{ amountAsset: Currency.WAVES, priceAsset: Currency.LIBRE },
             { amountAsset: Currency.WAVES, priceAsset: Currency.MIR }
         ];
 
