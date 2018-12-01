@@ -40,10 +40,7 @@
     var predefinedAssets = [
         Currency.BTC,
         Currency.USD,
-        Currency.EUR,
-        Currency.CNY,
-        Currency.WCT,
-        Currency.MRT
+        Currency.EUR
     ];
 
     angular
