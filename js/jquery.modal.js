@@ -75,7 +75,9 @@
       this.block();
       if(this.options.doFade) {
         setTimeout(function() {
-          m.show();
+          if ($.modal.isActive()) {
+            m.show();
+          };
         }, this.options.fadeDuration * this.options.fadeDelay);
       } else {
         this.show();
@@ -195,7 +197,7 @@
     spinnerHtml: null,
     showSpinner: true,
     showClose: true,
-    fadeDuration: null,   // Number of milliseconds the fade animation takes.
+    fadeDuration: 200,   // Number of milliseconds the fade animation takes.
     fadeDelay: 1.0        // Point during the overlay's fade-in that the modal begins to fade in (.5 = 50%, 1.5 = 150%, etc.)
   };
 
