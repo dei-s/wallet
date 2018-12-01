@@ -1,13 +1,10 @@
-# client_waves
+# client
 
-Клиент для работы с ассетом "МИР" в сети Waves
+Клиент для работы с ассетами проектов Института цифровой экономики им Глушкова (Digital Economy Institute, DEI) в сети Waves
 </br>
-<p align="center">
-  <img src="https://github.com/mir-one/client_waves/blob/master/wallet.png">
-</p>
+<p align="center"><img src="https://github.com/dei-s/wallet.dei.su/blob/master/wallet.png"></p>
 
 * Загрузите и распакуйте zip в любой каталог
-* Перейдите в каталог **client_waves**
 * Откройте **index.html** в браузере.
 * Начните использовать Client!
 </br></br>
@@ -15,3 +12,4 @@
 **_Имейте в виду, что в Client используется локальное хранилище вашего браузера для надежного хранения данных ваших учетных записей. Локальное хранилище браузера привязано к URL-адресу страницы, поэтому в этом случае это будет путь к index.html. Это означает, что если вы загрузите следующую версию Client, убедитесь, что вы распаковываете архив в каталог предыдущей версии. В противном случае путь к index.html изменится, и вы не сможете просмотреть свои сохраненные учетные записи._**
 
 :octocat: [@inozemtsev-roman](https://github.com/inozemtsev-roman)
+:octocat: [@prof1983](https://github.com/prof1983)
