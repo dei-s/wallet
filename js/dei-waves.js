@@ -295,6 +295,10 @@ Money.fromCoins = function (amount, currency) {
 Decimal.config({toExpNeg: -(Currency.WAVES.precision + 1)});
 
 
+
+
+// ==== waves.core ====
+
 (function() {
     'use strict';
 
@@ -305,6 +309,8 @@ Decimal.config({toExpNeg: -(Currency.WAVES.precision + 1)});
         'waves.core.directives'
     ]);
 })();
+
+// ==== waves.core.constants ====
 
 (function() {
     'use strict';
@@ -358,10 +364,20 @@ Decimal.config({toExpNeg: -(Currency.WAVES.precision + 1)});
         });
 })();
 
+
+
+
+// ==== waves.core.directives ====
+
 (function () {
     'use strict';
     angular.module('waves.core.directives', []);
 })();
+
+
+
+
+// ==== waves.core.services ====
 
 (function() {
     'use strict';
@@ -387,6 +403,11 @@ Decimal.config({toExpNeg: -(Currency.WAVES.precision + 1)});
             }
         });
 })();
+
+
+
+
+// ==== waves.core.filter ====
 
 /**
  * @author BjÃ¶rn Wenzel
@@ -2528,6 +2549,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.ui ====
+
 (function() {
     'use strict';
 
@@ -2750,6 +2776,11 @@ var OrderPrice = (function () {
             }, 1);
         }]);
 })();
+
+
+
+
+// ==== app.shared ====
 
 (function() {
     'use strict';
@@ -7443,6 +7474,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.login ====
+
 (function() {
     'use strict';
 
@@ -7878,6 +7914,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.navigation ====
+
 (function () {
     'use strict';
 
@@ -8122,6 +8163,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.wallet ====
+
 (function() {
     'use strict';
 
@@ -8355,9 +8401,6 @@ var OrderPrice = (function () {
                 Currency.EUR.id = '2xnE3EdpqXtFgCP156qt1AbyjpqdZ5jGjWo3CwTawcux';
                 Currency.USD.id = 'HyFJ3rrq5m7FxdkWtQXkZrDat1F7LjVVGfpSkUuEXQHj';
                 Currency.BTC.id = 'Fmg13HEHJHuZYbtJq8Da8wifJENq8uBxDuWoP9pVe2Qe';
-                Currency.ETH.id = '3fVdr1oiX39uS82ZGUPnu7atNQtFHZfPnseRDUcDxrhp';
-                Currency.LTC.id = 'NO_ID_YET'; // FIXME
-                Currency.ZEC.id = 'NO_ID_YET'; // FIXME
                 Currency.invalidateCache();
             }
         }
@@ -8660,7 +8703,6 @@ var OrderPrice = (function () {
                     var maximumPayment = Money.fromTokens(Math.min(ctrl.assetBalance.toTokens(),
                         response.in_max), ctrl.assetBalance.currency);
                     ctrl.sourceCurrency = ctrl.assetBalance.currency.displayName;
-                    ctrl.isEthereum = (ctrl.assetBalance.currency === Currency.ETH);
                     ctrl.exchangeRate = response.xrate;
                     ctrl.feeIn = response.fee_in;
                     ctrl.feeOut = response.fee_out;
@@ -8739,8 +8781,6 @@ var OrderPrice = (function () {
                 validateWithdrawCost(withdrawCost, ctrl.wavesBalance);
                 if (ctrl.assetBalance.currency === Currency.BTC) {
                     validateRecipientBTCAddress(ctrl.recipient);
-                } else if (ctrl.assetBalance.currency === Currency.ETH) {
-                    // TODO
                 }
             } catch (e) {
                 notificationService.error(e.message);
@@ -9040,6 +9080,11 @@ var OrderPrice = (function () {
         .controller('cardDepositController', WavesCardDepositController);
 })();
 
+
+
+
+// ==== app.tokens ====
+
 (function() {
     'use strict';
 
@@ -9212,6 +9257,11 @@ var OrderPrice = (function () {
         .module('app.tokens')
         .controller('tokenCreateController', TokenCreateController);
 })();
+
+
+
+
+// ==== app.dex ====
 
 (function() {
     'use strict';
@@ -10344,6 +10394,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.leasing ====
+
 (function() {
     'use strict';
 
@@ -10640,6 +10695,11 @@ var OrderPrice = (function () {
         });
 })();
 
+
+
+
+// ==== app.history ====
+
 (function() {
     'use strict';
 
@@ -10689,6 +10749,11 @@ var OrderPrice = (function () {
         .module('app.history')
         .controller('historyController', HistoryController);
 })();
+
+
+
+
+// ==== app.community ====
 
 (function() {
     'use strict';
@@ -10746,6 +10811,11 @@ var OrderPrice = (function () {
         .module('app.community')
         .controller('communityController', CommunityController);
 })();
+
+
+
+
+// ==== app.portfolio ====
 
 (function() {
     'use strict';
