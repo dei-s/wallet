@@ -1,6 +1,6 @@
 // Blake2B in pure Javascript
 // Adapted from the reference implementation in RFC7693
-// Ported to Javascript by DC - https://github.com/dcposch
+// Ported to Javascript by DC - https://github.com/dcposch/blakejs
 
 /* util */
 var ERROR_MSG_INPUT = 'Input must be an string, Buffer or Uint8Array'
@@ -76,13 +76,6 @@ function testSpeed (hashFn, N, M) {
 		console.log('Hashed in ' + ms + 'ms: ' + hashHex.substring(0, 20) + '...')
 		console.log(Math.round(N / (1 << 20) / (ms / 1000) * 100) / 100 + ' MB PER SECOND')
 	}
-}
-
-module.exports = {
-	normalizeInput: normalizeInput,
-	toHex: toHex,
-	debugPrint: debugPrint,
-	testSpeed: testSpeed
 }
 
 
@@ -327,7 +320,7 @@ function blake2b_final (ctx) {
 function blake2b (input, key, outlen) {
 	// preprocess inputs
 	outlen = outlen || 64
-	input = util.normalizeInput(input)
+	input = normalizeInput(input)
 
 	// do the math
 	var ctx = blake2b_init(outlen, key)
@@ -345,13 +338,5 @@ function blake2b (input, key, outlen) {
 // - outlen - optional output length in bytes, default 64
 function blake2bHex (input, key, outlen) {
 	var output = blake2b(input, key, outlen)
-	return util.toHex(output)
-}
-
-module.exports = {
-	blake2b: blake2b,
-	blake2bHex: blake2bHex,
-	blake2b_init: blake2b_init,
-	blake2b_update: blake2b_update,
-	blake2b_final: blake2b_final
+	return toHex(output)
 }
