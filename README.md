@@ -2,7 +2,7 @@
 
 Клиент для работы с ассетами проектов Института цифровой экономики им Глушкова (Digital Economy Institute, DEI) в сети Waves
 </br>
-<p align="center"><img src="https://github.com/dei-s/wallet.dei.su/blob/master/wallet.png"></p>
+<p align="center"><img src="wallet.png"></p>
 
 * Загрузите и распакуйте zip в любой каталог
 * Откройте **index.html** в браузере.
