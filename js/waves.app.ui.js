@@ -171,7 +171,7 @@
         home.logout = logout;
 
         var titlePrefix = utilsService.isTestnet() ? 'TESTNET ' : '';
-        home.title = titlePrefix + 'Waves Blockchain';
+        home.title = titlePrefix + 'DEI';
         home.version = applicationConstants.CLIENT_VERSION;
 
         $scope.$on(events.SPLASH_COMPLETED, function () {

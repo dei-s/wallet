@@ -232,7 +232,7 @@
 (function () {
     'use strict';
 
-    var prefix = 'Waves Blockchain';
+    var prefix = 'DEI';
 
     angular
         .module('app.shared')
