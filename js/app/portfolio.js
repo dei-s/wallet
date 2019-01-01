@@ -29,13 +29,13 @@
 (function () {
     'use strict';
 
-    function WavesAssetListController($scope, $timeout, $interval, events,
+    function AssetListController($scope, $timeout, $interval, events,
                                       applicationContext, apiService, formattingService) {
         var ctrl = this;
         var refreshPromise;
         var refreshDelay = 10 * 1000;
 
-        ctrl.wavesBalance = new Money(0, Currency.WAVES);
+        ctrl.baseBalance = new Money(0, Currency.BASE);
         ctrl.assets = [];
         ctrl.noData = true;
         ctrl.assetTransfer = assetTransfer;
@@ -64,7 +64,7 @@
         function assetTransfer(assetId) {
             $scope.$broadcast(events.ASSET_TRANSFER, {
                 assetId: assetId,
-                wavesBalance: ctrl.wavesBalance
+                baseBalance: ctrl.baseBalance
             });
         }
 
@@ -75,14 +75,14 @@
         function assetReissue(assetId) {
             $scope.$broadcast(events.ASSET_REISSUE, {
                 assetId: assetId,
-                wavesBalance: ctrl.wavesBalance
+                baseBalance: ctrl.baseBalance
             });
         }
 
         function assetMassPay(assetId) {
             $scope.$broadcast(events.ASSET_MASSPAY, {
                 assetId: assetId,
-                wavesBalance: ctrl.wavesBalance
+                baseBalance: ctrl.baseBalance
             });
         }
 
@@ -99,7 +99,7 @@
         function refreshBalance() {
             apiService.address.balance(applicationContext.account.address)
                 .then(function (response) {
-                    ctrl.wavesBalance = Money.fromCoins(response.balance, Currency.WAVES);
+                    ctrl.baseBalance = Money.fromCoins(response.balance, Currency.BASE);
                 });
         }
 
@@ -158,18 +158,18 @@
         }
     }
 
-    WavesAssetListController.$inject = ['$scope', '$timeout', '$interval', 'portfolio.events',
+    AssetListController.$inject = ['$scope', '$timeout', '$interval', 'portfolio.events',
         'applicationContext', 'apiService', 'formattingService'];
 
     angular
         .module('app.portfolio')
-        .controller('assetListController', WavesAssetListController);
+        .controller('assetListController', AssetListController);
 })();
 
 (function () {
     'use strict';
 
-    var FEE_CURRENCY = Currency.WAVES;
+    var FEE_CURRENCY = Currency.BASE;
 
     function AssetTransferController($scope, $timeout, constants, events, autocomplete, applicationContext,
                                      assetService, apiService, dialogService, formattingService,
@@ -211,7 +211,7 @@
                 },
                 assetFee: {
                     required: true,
-                    decimal: Currency.WAVES.precision,
+                    decimal: Currency.BASE.precision,
                     min: minimumFee.toTokens()
                 },
                 assetAttachment: {
@@ -246,7 +246,7 @@
         $scope.$on(events.ASSET_TRANSFER, function (event, eventData) {
             var asset = applicationContext.cache.assets[eventData.assetId];
             ctrl.availableBalance = asset.balance;
-            ctrl.feeAssetBalance = eventData.wavesBalance;
+            ctrl.feeAssetBalance = eventData.baseBalance;
             ctrl.asset = asset;
 
             resetPaymentForm();
@@ -324,7 +324,7 @@
         function resetPaymentForm() {
             ctrl.recipient = '';
             ctrl.amount = '0';
-            ctrl.confirm.amount = Money.fromTokens(0, Currency.WAVES);
+            ctrl.confirm.amount = Money.fromTokens(0, Currency.BASE);
             ctrl.confirm.fee = Money.fromTokens(constants.MINIMUM_TRANSACTION_FEE, FEE_CURRENCY);
             ctrl.autocomplete.defaultFee(constants.MINIMUM_TRANSACTION_FEE);
         }
@@ -342,7 +342,7 @@
 (function () {
     'use strict';
 
-    function WavesAssetDetailsController($scope, $timeout, events, applicationContext, dialogService) {
+    function AssetDetailsController($scope, $timeout, events, applicationContext, dialogService) {
         var details = this;
 
         function transformAddress(address) {
@@ -374,20 +374,20 @@
         });
     }
 
-    WavesAssetDetailsController.$inject = ['$scope', '$timeout', 'portfolio.events', 'applicationContext',
+    AssetDetailsController.$inject = ['$scope', '$timeout', 'portfolio.events', 'applicationContext',
         'dialogService'];
 
     angular
         .module('app.portfolio')
-        .controller('assetDetailsController', WavesAssetDetailsController);
+        .controller('assetDetailsController', AssetDetailsController);
 })();
 
 (function () {
     'use strict';
 
-    var FIXED_REISSUE_FEE = new Money(1, Currency.WAVES);
+    var FIXED_REISSUE_FEE = new Money(1, Currency.BASE);
 
-    function WavesAssetReissueController($scope, $timeout, constants, events, applicationContext, assetService,
+    function AssetReissueController($scope, $timeout, constants, events, applicationContext, assetService,
                                          dialogService, notificationService, formattingService, apiService,
                                          transactionBroadcast) {
         var reissue = this;
@@ -431,7 +431,7 @@
             reissue.assetName = asset.currency.displayName;
             reissue.totalTokens = asset.totalTokens;
             reissue.asset = asset;
-            reissue.wavesBalance = eventData.wavesBalance;
+            reissue.baseBalance = eventData.baseBalance;
 
             // update validation options and check how it affects form validation
             reissue.validationOptions.rules.assetAmount.decimal = asset.currency.precision;
@@ -455,7 +455,7 @@
                 // prevent dialog from closing
                 return false;
 
-            if (reissue.fee.greaterThan(reissue.wavesBalance)) {
+            if (reissue.fee.greaterThan(reissue.baseBalance)) {
                 notificationService.error('Not enough funds for the reissue transaction fee');
 
                 return false;
@@ -494,18 +494,18 @@
 
         function resetReissueForm() {
             reissue.amount = '0';
-            reissue.confirm.amount = Money.fromTokens(0, Currency.WAVES);
+            reissue.confirm.amount = Money.fromTokens(0, Currency.BASE);
             reissue.confirm.fee = reissue.fee;
         }
     }
 
-    WavesAssetReissueController.$inject = ['$scope', '$timeout', 'constants.ui', 'portfolio.events',
+    AssetReissueController.$inject = ['$scope', '$timeout', 'constants.ui', 'portfolio.events',
         'applicationContext', 'assetService', 'dialogService', 'notificationService',
         'formattingService', 'apiService', 'transactionBroadcast'];
 
     angular
         .module('app.portfolio')
-        .controller('assetReissueController', WavesAssetReissueController);
+        .controller('assetReissueController', AssetReissueController);
 })();
 
 (function () {
@@ -554,17 +554,17 @@
     var FIRST_TRANSACTIONS_COUNT = 10;
     var LOADING_STAGE = 'loading';
     var PROCESSING_STAGE = 'processing';
-    var ZERO_MONEY = Money.fromTokens(0, Currency.WAVES);
+    var ZERO_MONEY = Money.fromTokens(0, Currency.BASE);
 
     function ValidationError(message) {
         this.message = message;
     }
 
-    function WavesMassPaymentController ($scope, $window, $timeout, constants, events, applicationContext, autocomplete,
+    function MassPaymentController ($scope, $window, $timeout, constants, events, applicationContext, autocomplete,
                                          notificationService, assetService, dialogService,
                                          transactionBroadcast, apiService) {
         var mass = this;
-        var minimumFee = new Money(constants.MINIMUM_TRANSACTION_FEE, Currency.WAVES);
+        var minimumFee = new Money(constants.MINIMUM_TRANSACTION_FEE, Currency.BASE);
         var transactions;
 
         mass.summary = {
@@ -591,7 +591,7 @@
             rules: {
                 massPayFee: {
                     required: true,
-                    decimal: Currency.WAVES.precision,
+                    decimal: Currency.BASE.precision,
                     min: minimumFee.toTokens()
                 }
             },
@@ -617,13 +617,13 @@
         cleanup();
 
         $scope.$on(events.ASSET_MASSPAY, function (event, eventData) {
-            mass.wavesBalance = eventData.wavesBalance;
-            mass.assetBalance = eventData.wavesBalance;
+            mass.baseBalance = eventData.baseBalance;
+            mass.assetBalance = eventData.baseBalance;
             if (eventData.assetId) {
                 mass.assetBalance = applicationContext.cache.assets[eventData.assetId].balance;
             }
 
-            mass.sendingWaves = mass.assetBalance.currency === Currency.WAVES;
+            mass.sendingBase = mass.assetBalance.currency === Currency.BASE;
 
             cleanup();
 
@@ -710,8 +710,8 @@
                 var transferCurrency = mass.assetBalance.currency;
                 var totalTransactions = 0;
                 var totalAmount = Money.fromCoins(0, transferCurrency);
-                var totalFee = Money.fromCoins(0, Currency.WAVES);
-                var fee = Money.fromTokens(mass.autocomplete.getFeeAmount(), Currency.WAVES);
+                var totalFee = Money.fromCoins(0, Currency.BASE);
+                var fee = Money.fromTokens(mass.autocomplete.getFeeAmount(), Currency.BASE);
                 var minimumPayment = Money.fromCoins(1, transferCurrency);
                 _.forEach(mass.inputPayments, function (transfer) {
                     if (isNaN(transfer.amount)) {
@@ -793,12 +793,12 @@
         }
 
         function submitPayment() {
-            var paymentCost = !mass.sendingWaves ?
+            var paymentCost = !mass.sendingBase ?
                 mass.summary.totalFee :
                 mass.summary.totalFee.plus(mass.summary.totalAmount);
 
-            if (paymentCost.greaterThan(mass.wavesBalance)) {
-                notificationService.error('Not enough Waves to make mass payment');
+            if (paymentCost.greaterThan(mass.baseBalance)) {
+                notificationService.error('Not enough '+Currency.BASE.displayName+' to make mass payment');
 
                 return false;
             }
@@ -874,21 +874,21 @@
             mass.stage = LOADING_STAGE;
             mass.invalidPayment = false;
 
-            mass.confirm.amount = Money.fromTokens(0, Currency.WAVES);
+            mass.confirm.amount = Money.fromTokens(0, Currency.BASE);
             mass.confirm.recipients = 0;
-            mass.confirm.fee = Money.fromTokens(0, Currency.WAVES);
+            mass.confirm.fee = Money.fromTokens(0, Currency.BASE);
 
             mass.autocomplete.defaultFee(constants.MINIMUM_TRANSACTION_FEE);
         }
     }
 
-    WavesMassPaymentController.$inject = ['$scope', '$window', '$timeout', 'constants.ui', 'portfolio.events',
+    MassPaymentController.$inject = ['$scope', '$window', '$timeout', 'constants.ui', 'portfolio.events',
         'applicationContext', 'autocomplete.fees',
         'notificationService', 'assetService', 'dialogService', 'transactionBroadcast', 'apiService'];
 
     angular
         .module('app.portfolio')
-        .controller('massPaymentController', WavesMassPaymentController);
+        .controller('massPaymentController', MassPaymentController);
 })();
 
 (function () {
@@ -896,7 +896,7 @@
 
     angular
         .module('app.portfolio')
-        .directive('fileSelect', [function WavesFileSelectDirective() {
+        .directive('fileSelect', [function () {
             return {
                 restrict: 'A',
                 scope: {

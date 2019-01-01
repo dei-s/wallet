@@ -27,7 +27,7 @@
     var ASSET_NAME_MIN = 4;
     var ASSET_NAME_MAX = 16;
     var TOKEN_DECIMALS_MAX = 8;
-    var FIXED_ISSUE_FEE = new Money(1, Currency.WAVES);
+    var FIXED_ISSUE_FEE = new Money(1, Currency.BASE);
 
     function TokenCreateController($scope, $interval, constants, applicationContext, assetService,
                                    dialogService, apiService, notificationService,
@@ -44,7 +44,7 @@
             }
         });
 
-        ctrl.wavesBalance = new Money(0, Currency.WAVES);
+        ctrl.baseBalance = new Money(0, Currency.BASE);
         ctrl.issuanceValidationOptions = {
             rules: {
                 assetName: {
@@ -114,7 +114,7 @@
                 return;
             }
 
-            if (ctrl.asset.fee.greaterThan(ctrl.wavesBalance)) {
+            if (ctrl.asset.fee.greaterThan(ctrl.baseBalance)) {
                 notificationService.error('Not enough funds for the issue transaction fee');
                 return;
             }
@@ -173,7 +173,7 @@
         function refreshBalance() {
             apiService.address.balance(applicationContext.account.address)
                 .then(function (response) {
-                    ctrl.wavesBalance = Money.fromCoins(response.balance, Currency.WAVES);
+                    ctrl.baseBalance = Money.fromCoins(response.balance, Currency.BASE);
                 });
         }
     }

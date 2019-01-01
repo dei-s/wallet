@@ -908,7 +908,7 @@
 									<h2 class="sectionHeader">ASSET REISSUE</h2>
 									<div class="balanceAmt">
 										<p>Total tokens issued: </p><span class="balancewaves">{{reissue.totalTokens.formatAmount()}}</span><br/>
-										<p>Waves balance: </p><span class="balancewaves">{{reissue.wavesBalance.formatAmount(true)}}</span>
+										<p>Waves balance: </p><span class="balancewaves">{{reissue.baseBalance.formatAmount(true)}}</span>
 									</div>
 									<table class="wavesTable">
 										<thead>
@@ -1089,7 +1089,7 @@
 						<h2 class="sectionHeader">TOKEN CREATION</h2>
 						<form id="create-asset-form" name="createAssetForm" novalidate ng-validate="ctrl.issuanceValidationOptions" ng-submit="ctrl.assetIssueConfirmation(createAssetForm, $event)">
 							<div class="balanceAmt">
-								<p>Waves balance: </p><span class="balancewaves">{{ctrl.wavesBalance | moneyLong:true}}</span>
+								<p>Waves balance: </p><span class="balancewaves">{{ctrl.baseBalance | moneyLong:true}}</span>
 							</div>
 							<table class="wavesTable">
 								<thead>

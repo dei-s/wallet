@@ -123,11 +123,11 @@
 (function () {
     'use strict';
 
-    var DEFAULT_FEE = Money.fromTokens(0.001, Currency.WAVES);
+    var DEFAULT_FEE = Money.fromTokens(0.001, Currency.BASE);
     var ALIAS_MINIMUM_LENGTH = 4;
     var ALIAS_MAXIMUM_LENGTH = 30;
 
-    function WavesCreateAliasController($scope, $timeout, events, applicationContext,
+    function CreateAliasController($scope, $timeout, events, applicationContext,
                                         dialogService, notificationService, transactionBroadcast,
                                         formattingService, aliasRequestService, apiService) {
         var ctrl = this;
@@ -211,19 +211,19 @@
         }
     }
 
-    WavesCreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
+    CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
                                           'dialogService', 'notificationService', 'transactionBroadcast',
                                           'formattingService', 'aliasRequestService', 'apiService'];
 
     angular
         .module('app.navigation')
-        .controller('createAliasController', WavesCreateAliasController);
+        .controller('createAliasController', CreateAliasController);
 })();
 
 (function () {
     'use strict';
 
-    function WavesTabController($scope, dialogService) {
+    function TabController($scope, dialogService) {
         $scope.isSelected = function () {
             return $scope.pageId === $scope.currentPageId;
         };
@@ -236,23 +236,23 @@
         };
     }
 
-    function WavesTabLink(scope, element) {
+    function TabLink(scope, element) {
         element.addClass('tabs-radio');
     }
 
     angular
         .module('app.navigation')
-        .directive('wavesTab', function WavesTabDirective() {
+        .directive('baseTab', function () {
             return {
                 restrict: 'A',
-                controller: ['$scope', 'dialogService', WavesTabController],
+                controller: ['$scope', 'dialogService', TabController],
                 scope: {
                     pageId: '@',
                     caption: '<',
                     onSelect: '&',
                     currentPageId: '<'
                 },
-                link: WavesTabLink,
+                link: TabLink,
                 templateUrl: 'navigation/tab.directive'
             };
         });
