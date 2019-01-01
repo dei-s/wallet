@@ -3821,7 +3821,7 @@
 	}
 
 	function DialogLink(scope, element) {
-		element.addClass('wavesPop');
+		element.addClass('basePop');
 
 		if (!scope.global) {
 			element.addClass('recyclable');
