@@ -34,29 +34,39 @@
 <div ng-controller="splashController as splash" id="bg-spin" class="noSelect" ng-show="home.screen === 'splash-screen'">
 	<div id="logo-container-centered" class="centerIt">
 		<div id="logoo">
-			<img id="logo-spin" src="img/logo-spin.svg" />
+			<img id="logo-spin" src="img/logo-spin-blue.svg" />
 			<p id="networkCheck">Loading...</p>
 		</div>
 	</div>
 </div>
 
 <!-- LOG IN AREA -->
-<div id="lockscreen" class="userBG" ng-controller="accountsController as accounts" ng-switch-when="accounts-screen" ng-cloak>
-	<table id="lockscreenTable">
+<div id="lockscreen" ng-controller="accountsController as accounts" ng-switch-when="accounts-screen" ng-cloak>
+	<div id="lockscreen-network-div">
+		<img
+			src="img/wB-bg-MIR-blue.svg"
+			alt="Mainnet"
+			title="Подключиться к сети WAVES.MAINNET">
+		<img
+			onclick="document.location.href = 'mir';"
+			src="img/wB-bg-MIR-purple.svg"
+			alt="Mirnet"
+			title="Подключиться к сети MIRNET"
+			style="opacity:.4;cursor:pointer;">
+	</div>
 
-		<thead>
-		<div id="logoNversion">
-			<img src="img/topleftlogo.svg" />
-			<p ng-class='{testnet: isTestnet()}'>{{::home.title}} <span class="wlcversion">{{::home.version}}</span></p>
-		</div>
-		</thead>
+	<div id="lockscreen-logo-div">
+		<img src="img/topleftlogo.svg" />
+		<p ng-class='{testnet: isTestnet()}'>{{::home.title}} <span class="wlcversion">{{::home.version}}</span></p>
+	</div>
 
+	<table id="lockscreen-table">
 		<tbody>
 		<tr>
 			<td>
 				<!-- Accounts -->
 				<div id="accounts">
-					<h2 id="AccHeader">{{accounts.caption}}</h2>
+					<h2 id="account-header">{{accounts.caption}}</h2>
 					<div class="wavesAccounts" ng-controller="accountListController as list" ng-show="accounts.mode === 'list'">
 						<p class="loginAccountDiv" ng-repeat="account in list.accounts track by $index">
 							<span class="loginAccount fade" tooltipster tooltip-theme="tooltipster-theme1" title="Log into this account." ng-click="list.signIn(account)"> <br/>
@@ -211,7 +221,6 @@
 			</td>
 		</tr>
 		</tbody>
-
 	</table>
 </div>
 
@@ -232,7 +241,7 @@
 	<!-- HEADER -->
 	<header class="fFade noSelect" ng-controller="mainMenuController as menu">
 		<img id="topLogoH" src="img/topleftlogo_hor.svg" alt="Waves platform logo horizontal" />
-		<div id="logoNversion2">
+		<div id="wrapper-logo-div">
 			<img src="img/topleftlogo2.svg" />
 			<p ng-class='{testnet: isTestnet()}'>{{::home.title}} <span class="wlcversion">{{::home.version}}</span></p>
 		</div>
@@ -1202,6 +1211,18 @@
 	</div> <!-- navigationContainer -->
 </div> <!-- Wrapper div END -->
 
+<script>
+DEI_VERSION = '1.1.0'
+DEI_NETWORK_CODE = 'W';
+DEI_NETWORK_NAME = 'mainnet';
+DEI_NODE_ADDRESS = 'https://nodes.wavesplatform.com';
+DEI_MATCHER_ADDRESS = 'https://matcher.wavesplatform.com';
+DEI_SUPPORT_LINK = 'dei.su';
+
+function isMir() {
+	return DEI_NETWORK_NAME == 'mirnet';
+}
+</script>
 
 <script src="js/jquery.js"></script>
 <script src="js/sha3.js"></script>
