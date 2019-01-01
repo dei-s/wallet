@@ -45,13 +45,25 @@ var Currency = (function () {
 		return this.displayName;
 	};
 
-	var WAVES = new Currency({
-		id: '',
-		displayName: 'Waves',
-		shortName: 'WAVES',
-		precision: 8,
-		verified: true
-	});
+	if (isMir()) {
+		var MIR = new Currency({
+			id: '',
+			displayName: 'MIR',
+			shortName: 'MIR',
+			precision: 8,
+			verified: true
+		});
+		var BASE = MIR;
+	} else {
+		var WAVES = new Currency({
+			id: '',
+			displayName: 'Waves',
+			shortName: 'WAVES',
+			precision: 8,
+			verified: true
+		});
+		var BASE = WAVES;
+	}
 
 	var BTC = new Currency({
 		id: '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS',
@@ -108,7 +120,7 @@ var Currency = (function () {
 	function invalidateCache() {
 		currencyCache = {};
 
-		currencyCache[WAVES.id] = WAVES;
+		currencyCache[BASE.id] = BASE;
 		currencyCache[BTC.id] = BTC;
 		currencyCache[USD.id] = USD;
 		currencyCache[EUR.id] = EUR;
@@ -134,7 +146,7 @@ var Currency = (function () {
 		},
 		invalidateCache: invalidateCache,
 		isCached: isCached,
-		WAVES: WAVES,
+		BASE: BASE,
 		BTC: BTC,
 		USD: USD,
 		EUR: EUR,
@@ -145,4 +157,4 @@ var Currency = (function () {
 })();
 
 // set up decimal to format 0.00000001 as is instead of 1e-8
-Decimal.config({toExpNeg: -(Currency.WAVES.precision + 1)});
+Decimal.config({toExpNeg: -(Currency.BASE.precision + 1)});

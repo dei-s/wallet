@@ -71,7 +71,7 @@
 						})
 						.then(apiService.address.balance.bind(apiService.address, self.address))
 						.then(function (response) {
-							self.balances[Currency.WAVES.id] = Money.fromCoins(response.balance, Currency.WAVES);
+							self.balances[Currency.BASE.id] = Money.fromCoins(response.balance, Currency.BASE);
 						});
 				};
 
@@ -280,6 +280,9 @@
 (function () {
 	'use strict';
 
+	if (isMir()) {
+		var spamAssets = {}
+	} else {
 		var spamAssets = {
 			'2udT6qcXrYNdkwAqY8ZLGUJtL9UCno6bWsx5YoHpcnqo': true,
 			'J1yTiGyAd8eJHyZfP8DgNS8mdLgtNx7XFSTVrYPb3jn8': true,
@@ -3585,6 +3588,7 @@
 			'J3MYxiQ7ngAGaK129Ac7fLFfzTosA6YVhzsBeuzk1GXX': true,
 			'2xUpPkiAbgwjCmohcM2bxc2bpzyF77wa1L61BwNcFpbP': true
 		};
+	}
 	var hasBeenUpdated = false; // set this to false to update asset list from github
 	var isPendingUpdate = false;
 	var SPAM_ASSET_LIST_URL = 'https://raw.githubusercontent.com/wavesplatform/waves-community/' +
@@ -3694,7 +3698,7 @@
 
 	angular
 		.module('app.shared')
-		.component('wavesPage', {
+		.component('basePage', {
 			controller: PageController,
 			bindings: {
 				pageTitle: '@'
@@ -3745,7 +3749,7 @@
 
 	angular
 		.module('app.shared')
-		.component('wavesQrCode', {
+		.component('baseQrCode', {
 			controller: QrCodeController,
 			bindings: {
 				size: '<',
@@ -3764,7 +3768,7 @@
 
 	angular
 		.module('app.shared')
-		.component('wavesScrollbox', {
+		.component('baseScrollbox', {
 			controller: ScrollboxController,
 			transclude: true,
 			template: '<div ng-transclude></div>'
@@ -3774,7 +3778,7 @@
 (function () {
 	'use strict';
 
-	function WavesDialogController($scope, dialogService) {
+	function DialogController($scope, dialogService) {
 		var defaults = {
 			isError: false,
 			cancelButtonVisible: true,
@@ -3816,7 +3820,7 @@
 		};
 	}
 
-	function WavesDialogLink(scope, element) {
+	function DialogLink(scope, element) {
 		element.addClass('wavesPop');
 
 		if (!scope.global) {
@@ -3826,11 +3830,10 @@
 
 	angular
 		.module('app.shared')
-		.directive('wavesDialog', function WavesDialogDirective() {
-
+		.directive('baseDialog', function () {
 			return {
 				restrict: 'A',
-				controller: ['$scope', 'dialogService', WavesDialogController],
+				controller: ['$scope', 'dialogService', DialogController],
 				transclude: true,
 				scope: {
 					closeable: '=?',
@@ -3846,7 +3849,7 @@
 					global: '=?',
 					noSupportLink: '=?'
 				},
-				link: WavesDialogLink,
+				link: DialogLink,
 				templateUrl: 'shared/dialog.directive'
 			};
 		});
@@ -3857,7 +3860,7 @@
 
 	angular
 		.module('app.shared')
-		.directive('focusMe', ['$timeout', function WavesFocusDirective($timeout) {
+		.directive('focusMe', ['$timeout', function ($timeout) {
 			return {
 				restrict: 'A',
 				link: function (scope, element, attributes) {
@@ -3876,8 +3879,7 @@
 
 	angular
 		.module('app.shared')
-		.directive('tooltipster', ['constants.tooltip', function WavesTooltipsterDirective(constants) {
-
+		.directive('tooltipster', ['constants.tooltip', function (constants) {
 			return {
 				restrict: 'A',
 				link: function (scope, element, attributes) {
@@ -3912,7 +3914,7 @@
 (function () {
 	'use strict';
 
-	function WavesTransactionLoadingService($q, constants, apiService) {
+	function TransactionLoadingService($q, constants, apiService) {
 		var self = this;
 
 		// returns promise that loads and merges unconfirmed and confirmed transactions
@@ -4008,11 +4010,11 @@
 		};
 	}
 
-	WavesTransactionLoadingService.$inject = ['$q', 'constants.transactions', 'apiService'];
+	TransactionLoadingService.$inject = ['$q', 'constants.transactions', 'apiService'];
 
 	angular
 		.module('app.shared')
-		.service('transactionLoadingService', WavesTransactionLoadingService);
+		.service('transactionLoadingService', TransactionLoadingService);
 })();
 
 (function () {
@@ -4083,8 +4085,8 @@
 		}
 
 		function processPaymentTransaction(transaction) {
-			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.WAVES).formatAmount();
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.BASE).formatAmount();
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processAssetIssueTransaction(transaction) {
@@ -4098,7 +4100,7 @@
 		}
 
 		function processCreateAliasTransaction(transaction) {
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processAssetTransferTransaction(transaction) {
@@ -4109,7 +4111,7 @@
 					currency = asset.currency;
 				}
 			} else {
-				currency = Currency.WAVES;
+				currency = Currency.BASE;
 			}
 
 			if (!currency) {
@@ -4131,16 +4133,16 @@
 		}
 
 		function processStartLeasingTransaction(transaction) {
-			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.WAVES).formatAmount();
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.BASE).formatAmount();
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processCancelLeasingTransaction(transaction) {
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processMassPaymentTransaction(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.assetId;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4171,7 +4173,7 @@
 			}
 
 			transaction.formatted.type = type;
-			transaction.formatted.fee = Money.fromCoins(totalFee, Currency.WAVES).formatAmount(true);
+			transaction.formatted.fee = Money.fromCoins(totalFee, Currency.BASE).formatAmount(true);
 
 			var currency;
 			if (assetId) {
@@ -4180,7 +4182,7 @@
 					currency = asset.currency;
 				}
 			} else {
-				currency = Currency.WAVES;
+				currency = Currency.BASE;
 			}
 
 			if (currency) {
@@ -4190,7 +4192,7 @@
 		}
 
 		function formatFee(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.feeAsset;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4203,7 +4205,7 @@
 		}
 
 		function getFeeAsset(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.feeAsset;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4472,7 +4474,7 @@
 
 	angular
 		.module('app.shared')
-		.directive('decimalInputRestrictor', [function WavesDecimalInputRestrictorDirective() {
+		.directive('decimalInputRestrictor', [function () {
 			return {
 				restrict: 'A',
 				require: 'ngModel',
@@ -4503,7 +4505,7 @@
 
 	angular
 		.module('app.shared')
-		.directive('integerInputRestrictor', [function WavesIntegerInputRestrictorDirective() {
+		.directive('integerInputRestrictor', [function () {
 			return {
 				restrict: 'A',
 				require: 'ngModel',
@@ -4538,7 +4540,7 @@
 
 	angular
 		.module('app.shared')
-		.component('wavesSupportLink', {
+		.component('supportLink', {
 			controller: SupportLinkController,
 			template: '<a href="http://' + url + '" target="_blank">' + url + '</a>'
 		});
@@ -4621,13 +4623,13 @@
 (function () {
 	'use strict';
 
-	var FEE_CURRENCY = Currency.WAVES;
+	var FEE_CURRENCY = Currency.BASE;
 	var DEFAULT_ERROR_MESSAGE = 'The Internet connection is lost';
 
 	// TODO : add the `exceptField` attribute or a list of all the needed fields.
 
-	function WavesTransactionHistoryController($scope, events, constants, applicationContext,
-											   apiService, leasingRequestService, notificationService, dialogService) {
+	function TransactionHistoryController($scope, events, constants, applicationContext,
+			apiService, leasingRequestService, notificationService, dialogService) {
 		var ctrl = this;
 		var minimumFee = new Money(constants.MINIMUM_TRANSACTION_FEE, FEE_CURRENCY);
 
@@ -4687,13 +4689,13 @@
 		}
 	}
 
-	WavesTransactionHistoryController.$inject = ['$scope', 'ui.events', 'constants.ui', 'applicationContext',
+	TransactionHistoryController.$inject = ['$scope', 'ui.events', 'constants.ui', 'applicationContext',
 		'apiService', 'leasingRequestService', 'notificationService', 'dialogService'];
 
 	angular
 		.module('app.shared')
-		.component('wavesTransactionHistory', {
-			controller: WavesTransactionHistoryController,
+		.component('transactionHistory', {
+			controller: TransactionHistoryController,
 			bindings: {
 				heading: '@',
 				transactions: '<',
