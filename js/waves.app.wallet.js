@@ -58,7 +58,7 @@
 			displayName: Currency.LIBRE.displayName
 		};
 		mapping[Currency.MIR.displayName] = {
-			image: 'wB-bg-MIR.svg',
+			image: 'wB-bg-MIR-blue.svg',
 			displayName: Currency.MIR.displayName
 		};
 
