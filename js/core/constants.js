@@ -20,9 +20,9 @@
 	angular
 		.module('waves.core.constants', [])
 		.constant('constants.network', {
-			NETWORK_NAME: 'devel', // 'devnet', 'testnet', 'mainnet'
+			NETWORK_NAME: DEI_NETWORK_NAME,
 			ADDRESS_VERSION: 1,
-			NETWORK_CODE: 'T',
+			NETWORK_CODE: DEI_NETWORK_CODE,
 			INITIAL_NONCE: 0
 		});
 
