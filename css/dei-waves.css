@@ -335,7 +335,7 @@ md-autocomplete.fee-autocomplete button:hover md-icon path{fill:#fff}
 .testnet{color:#e1b47d!important}
 #account-remove-popup{max-width:500px;padding-bottom:32px;padding-bottom:2rem}
 #account-remove-popup p{text-align:justify;padding-left:32px;padding-left:2rem;padding-right:32px;padding-right:2rem}
-#account-header{
+#accounts-header{
 	background:hsla(0,0%,100%,.9);
 	color:#333;
 	font-size:1.5rem;

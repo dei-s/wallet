@@ -44,7 +44,7 @@
 
 	<div id="lockscreen-table">
 		<div id="accounts">
-			<h2 id="account-header">{{accounts.caption}}</h2>
+			<h2 id="accounts-header">{{accounts.caption}}</h2>
 			<div class="accounts-list" ng-controller="accountListController as list" ng-show="accounts.mode === 'list'">
 				<p class="loginAccountDiv" ng-repeat="account in list.accounts track by $index">
 					<span class="loginAccount fade" tooltipster tooltip-theme="tooltipster-theme1" title="Log into this account." ng-click="list.signIn(account)">
