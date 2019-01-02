@@ -1,0 +1,54 @@
+#welcome{
+	background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),url(../img/bg.jpg) no-repeat fixed 50%;
+	background-size:cover;
+	position:fixed;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+	color:#fff;
+	padding:3rem;
+	overflow-y:auto;
+	min-height:100%;
+}
+#welcome-logo{
+	position:relative;
+	width:192px;
+	width:12rem;
+	margin:0 auto 1rem;
+}
+#welcome-logo>img{
+	width:192px;
+	width:12rem;
+	margin-bottom:1rem;
+}
+#welcome-network{
+	margin:1rem auto;
+	text-align:center;
+}
+#welcome-network>div{
+	cursor:pointer;
+	display:inline-block;
+	height:10rem;
+	padding:1rem;
+	width:10rem;
+}
+#welcome-network>div>img{
+	margin:.5rem;
+}
+#welcome-network>div>p{
+	font-size:1.5rem;
+	text-align:center;
+}
+@media only screen and (max-width:800px){
+	#welcome{
+		padding:0;
+	}
+}
+@media only screen and (max-width:420px){
+	#welcome{
+		min-width:300px;
+		text-align:center;
+		margin:0 auto;
+	}
+}
