@@ -15,174 +15,173 @@
  ******************************************************************************/
 
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('app.tokens', ['app.shared']);
+	angular.module('app.tokens', ['app.shared']);
 })();
 
 (function () {
-    'use strict';
+	'use strict';
 
-    var ASSET_DESCRIPTION_MAX = 1000;
-    var ASSET_NAME_MIN = 4;
-    var ASSET_NAME_MAX = 16;
-    var TOKEN_DECIMALS_MAX = 8;
-    var FIXED_ISSUE_FEE = new Money(1, Currency.BASE);
+	var ASSET_DESCRIPTION_MAX = 1000;
+	var ASSET_NAME_MIN = 4;
+	var ASSET_NAME_MAX = 16;
+	var TOKEN_DECIMALS_MAX = 8;
+	var FIXED_ISSUE_FEE = new Money(1, Currency.BASE);
 
-    function TokenCreateController($scope, $interval, constants, applicationContext, assetService,
-                                   dialogService, apiService, notificationService,
-                                   formattingService, transactionBroadcast) {
-        var refreshPromise;
-        var refreshDelay = 15 * 1000;
-        var transaction;
-        var ctrl = this;
+	function TokenCreateController($scope, $interval, constants, applicationContext, assetService,
+			dialogService, apiService, notificationService, formattingService, transactionBroadcast) {
+		var refreshPromise;
+		var refreshDelay = 15 * 1000;
+		var transaction;
+		var ctrl = this;
 
-        $scope.$on('$destroy', function () {
-            if (angular.isDefined(refreshPromise)) {
-                $interval.cancel(refreshPromise);
-                refreshPromise = undefined;
-            }
-        });
+		$scope.$on('$destroy', function () {
+			if (angular.isDefined(refreshPromise)) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = undefined;
+			}
+		});
 
-        ctrl.baseBalance = new Money(0, Currency.BASE);
-        ctrl.issuanceValidationOptions = {
-            rules: {
-                assetName: {
-                    required: true,
-                    minbytelength: ASSET_NAME_MIN,
-                    maxbytelength: ASSET_NAME_MAX
-                },
-                assetDescription: {
-                    maxbytelength: ASSET_DESCRIPTION_MAX
-                },
-                assetTotalTokens: {
-                    required: true,
-                    min: 0
-                },
-                assetTokenDecimalPlaces: {
-                    required: true,
-                    min: 0,
-                    max: TOKEN_DECIMALS_MAX
-                }
-            },
-            messages: {
-                assetName: {
-                    required: 'Asset name is required',
-                    minbytelength: 'Asset name is too short. Please give your asset a longer name',
-                    maxbytelength: 'Asset name is too long. Please give your asset a shorter name'
-                },
-                assetDescription: {
-                    maxbytelength: 'Maximum length of asset description exceeded. Please make a shorter description'
-                },
-                assetTotalTokens: {
-                    required: 'Total amount of issued tokens in required',
-                    min: 'Total issued tokens amount must be greater than or equal to zero'
-                },
-                assetTokenDecimalPlaces: {
-                    required: 'Number of token decimal places is required',
-                    min: 'Number of token decimal places must be greater or equal to zero',
-                    max: 'Number of token decimal places must be less than or equal to ' + TOKEN_DECIMALS_MAX
-                }
-            }
-        };
-        ctrl.asset = {
-            fee: FIXED_ISSUE_FEE
-        };
-        ctrl.confirm = {};
-        ctrl.broadcast = new transactionBroadcast.instance(apiService.assets.issue,
-            function (transaction, response) {
-                resetForm();
+		ctrl.baseBalance = new Money(0, Currency.BASE);
+		ctrl.issuanceValidationOptions = {
+			rules: {
+				assetName: {
+					required: true,
+					minbytelength: ASSET_NAME_MIN,
+					maxbytelength: ASSET_NAME_MAX
+				},
+				assetDescription: {
+					maxbytelength: ASSET_DESCRIPTION_MAX
+				},
+				assetTotalTokens: {
+					required: true,
+					min: 0
+				},
+				assetTokenDecimalPlaces: {
+					required: true,
+					min: 0,
+					max: TOKEN_DECIMALS_MAX
+				}
+			},
+			messages: {
+				assetName: {
+					required: 'Asset name is required',
+					minbytelength: 'Asset name is too short. Please give your asset a longer name',
+					maxbytelength: 'Asset name is too long. Please give your asset a shorter name'
+				},
+				assetDescription: {
+					maxbytelength: 'Maximum length of asset description exceeded. Please make a shorter description'
+				},
+				assetTotalTokens: {
+					required: 'Total amount of issued tokens in required',
+					min: 'Total issued tokens amount must be greater than or equal to zero'
+				},
+				assetTokenDecimalPlaces: {
+					required: 'Number of token decimal places is required',
+					min: 'Number of token decimal places must be greater or equal to zero',
+					max: 'Number of token decimal places must be less than or equal to ' + TOKEN_DECIMALS_MAX
+				}
+			}
+		};
+		ctrl.asset = {
+			fee: FIXED_ISSUE_FEE
+		};
+		ctrl.confirm = {};
+		ctrl.broadcast = new transactionBroadcast.instance(apiService.assets.issue,
+			function (transaction, response) {
+				resetForm();
 
-                applicationContext.cache.putAsset(response);
+				applicationContext.cache.putAsset(response);
 
-                var displayMessage = 'Asset ' + ctrl.confirm.name + ' has been issued!<br/>' +
-                    'Total tokens amount: ' + ctrl.confirm.totalTokens + '<br/>' +
-                    'Date: ' + formattingService.formatTimestamp(transaction.timestamp);
-                notificationService.notice(displayMessage);
-            });
-        ctrl.broadcastIssueTransaction = broadcastIssueTransaction;
-        ctrl.assetIssueConfirmation = assetIssueConfirmation;
-        ctrl.resetForm = resetForm;
+				var displayMessage = 'Asset ' + ctrl.confirm.name + ' has been issued!<br/>' +
+					'Total tokens amount: ' + ctrl.confirm.totalTokens + '<br/>' +
+					'Date: ' + formattingService.formatTimestamp(transaction.timestamp);
+				notificationService.notice(displayMessage);
+			});
+		ctrl.broadcastIssueTransaction = broadcastIssueTransaction;
+		ctrl.assetIssueConfirmation = assetIssueConfirmation;
+		ctrl.resetForm = resetForm;
 
-        loadDataFromBackend();
-        resetForm();
+		loadDataFromBackend();
+		resetForm();
 
-        function assetIssueConfirmation(form, event) {
-            event.preventDefault();
+		function assetIssueConfirmation(form, event) {
+			event.preventDefault();
 
-            if (!form.validate()) {
-                return;
-            }
+			if (!form.validate()) {
+				return;
+			}
 
-            if (ctrl.asset.fee.greaterThan(ctrl.baseBalance)) {
-                notificationService.error('Not enough funds for the issue transaction fee');
-                return;
-            }
+			if (ctrl.asset.fee.greaterThan(ctrl.baseBalance)) {
+				notificationService.error('Not enough funds for the issue transaction fee');
+				return;
+			}
 
-            var decimalPlaces = Number(ctrl.asset.decimalPlaces);
-            var maxTokens = Math.floor(constants.JAVA_MAX_LONG / Math.pow(10, decimalPlaces));
-            if (ctrl.asset.totalTokens > maxTokens) {
-                notificationService.error('Total issued tokens amount must be less than ' + maxTokens);
+			var decimalPlaces = Number(ctrl.asset.decimalPlaces);
+			var maxTokens = Math.floor(constants.JAVA_MAX_LONG / Math.pow(10, decimalPlaces));
+			if (ctrl.asset.totalTokens > maxTokens) {
+				notificationService.error('Total issued tokens amount must be less than ' + maxTokens);
 
-                return;
-            }
+				return;
+			}
 
-            var asset = {
-                name: ctrl.asset.name,
-                description: ctrl.asset.description,
-                totalTokens: ctrl.asset.totalTokens,
-                decimalPlaces: Number(ctrl.asset.decimalPlaces),
-                reissuable: ctrl.asset.reissuable,
-                fee: ctrl.asset.fee
-            };
+			var asset = {
+				name: ctrl.asset.name,
+				description: ctrl.asset.description,
+				totalTokens: ctrl.asset.totalTokens,
+				decimalPlaces: Number(ctrl.asset.decimalPlaces),
+				reissuable: ctrl.asset.reissuable,
+				fee: ctrl.asset.fee
+			};
 
-            var sender = {
-                publicKey: applicationContext.account.keyPair.public,
-                privateKey: applicationContext.account.keyPair.private
-            };
+			var sender = {
+				publicKey: applicationContext.account.keyPair.public,
+				privateKey: applicationContext.account.keyPair.private
+			};
 
-            ctrl.confirm.name = ctrl.asset.name;
-            ctrl.confirm.totalTokens = ctrl.asset.totalTokens;
-            ctrl.confirm.reissuable = ctrl.asset.reissuable ? 'RE-ISSUABLE' : 'NON RE-ISSUABLE';
+			ctrl.confirm.name = ctrl.asset.name;
+			ctrl.confirm.totalTokens = ctrl.asset.totalTokens;
+			ctrl.confirm.reissuable = ctrl.asset.reissuable ? 'RE-ISSUABLE' : 'NON RE-ISSUABLE';
 
-            ctrl.broadcast.setTransaction(assetService.createAssetIssueTransaction(asset, sender));
+			ctrl.broadcast.setTransaction(assetService.createAssetIssueTransaction(asset, sender));
 
-            dialogService.open('#create-asset-confirmation');
-        }
+			dialogService.open('#create-asset-confirmation');
+		}
 
-        function broadcastIssueTransaction() {
-            ctrl.broadcast.broadcast();
-        }
+		function broadcastIssueTransaction() {
+			ctrl.broadcast.broadcast();
+		}
 
-        function resetForm() {
-            ctrl.asset.name = '';
-            ctrl.asset.description = '';
-            ctrl.asset.totalTokens = '0';
-            ctrl.asset.decimalPlaces = '0';
-            ctrl.asset.reissuable = false;
-        }
+		function resetForm() {
+			ctrl.asset.name = '';
+			ctrl.asset.description = '';
+			ctrl.asset.totalTokens = '0';
+			ctrl.asset.decimalPlaces = '0';
+			ctrl.asset.reissuable = false;
+		}
 
-        function loadDataFromBackend() {
-            refreshBalance();
+		function loadDataFromBackend() {
+			refreshBalance();
 
-            refreshPromise = $interval(function() {
-                refreshBalance();
-            }, refreshDelay);
-        }
+			refreshPromise = $interval(function() {
+				refreshBalance();
+			}, refreshDelay);
+		}
 
-        function refreshBalance() {
-            apiService.address.balance(applicationContext.account.address)
-                .then(function (response) {
-                    ctrl.baseBalance = Money.fromCoins(response.balance, Currency.BASE);
-                });
-        }
-    }
+		function refreshBalance() {
+			apiService.address.balance(applicationContext.account.address)
+				.then(function (response) {
+					ctrl.baseBalance = Money.fromCoins(response.balance, Currency.BASE);
+				});
+		}
+	}
 
-    TokenCreateController.$inject = ['$scope', '$interval', 'constants.ui', 'applicationContext',
-        'assetService', 'dialogService', 'apiService', 'notificationService',
-        'formattingService', 'transactionBroadcast'];
+	TokenCreateController.$inject = ['$scope', '$interval', 'constants.ui', 'applicationContext',
+			'assetService', 'dialogService', 'apiService', 'notificationService',
+			'formattingService', 'transactionBroadcast'];
 
-    angular
-        .module('app.tokens')
-        .controller('tokenCreateController', TokenCreateController);
+	angular
+		.module('app.tokens')
+		.controller('tokenCreateController', TokenCreateController);
 })();
