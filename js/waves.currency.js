@@ -119,7 +119,6 @@ var Currency = (function () {
 
 	function invalidateCache() {
 		currencyCache = {};
-
 		currencyCache[BASE.id] = BASE;
 		currencyCache[BTC.id] = BTC;
 		currencyCache[USD.id] = USD;
@@ -127,10 +126,32 @@ var Currency = (function () {
 		currencyCache[DEIP.id] = DEIP;
 		currencyCache[LIBRE.id] = LIBRE;
 		currencyCache[MIR.id] = MIR;
+		if (!isMir()) {
+			currencyCache[WAVES.id] = WAVES;
+		}
 	}
 
 	invalidateCache();
 
+	if (isMir()) {
+		return {
+			create: function (data) {
+				// if currency data.id is not set - it's a temporary instance
+				if (!_.has(data, 'id')) {
+					return new Currency(data);
+				}
+				if (!currencyCache[data.id]) {
+					currencyCache[data.id] = new Currency(data);
+				}
+				return currencyCache[data.id];
+			},
+			invalidateCache: invalidateCache,
+			isCached: isCached,
+			BASE: BASE,
+			LBR: LBR,
+			MIR: MIR
+		};
+	} else {
 	return {
 		create: function (data) {
 			// if currency data.id is not set - it's a temporary instance
@@ -152,8 +173,10 @@ var Currency = (function () {
 		EUR: EUR,
 		DEIP: DEIP,
 		LIBRE: LIBRE,
-		MIR: MIR
+		MIR: MIR,
+		WAVES: WAVES
 	};
+	}
 })();
 
 // set up decimal to format 0.00000001 as is instead of 1e-8
