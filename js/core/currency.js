@@ -130,6 +130,7 @@ var Currency = (function () {
 		currencyCache[BASE.id] = BASE;
 		if (isMir()) {
 			currencyCache[LBR.id] = LBR;
+			currencyCache[MIR.id] = MIR;
 		} else {
 			currencyCache[BTC.id] = BTC;
 			currencyCache[USD.id] = USD;
