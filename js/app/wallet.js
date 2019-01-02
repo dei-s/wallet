@@ -297,9 +297,8 @@
 	var FEE_CURRENCY = Currency.BASE;
 
 	function WalletSendController($scope, $timeout, constants, events, autocomplete,
-								  applicationContext, apiService, dialogService,
-								  transactionBroadcast, assetService, notificationService,
-								  formattingService, addressService) {
+			applicationContext, apiService, dialogService, transactionBroadcast, assetService,
+			notificationService, formattingService, addressService) {
 		var ctrl = this;
 		var minimumFee = new Money(constants.MINIMUM_TRANSACTION_FEE, FEE_CURRENCY);
 
@@ -834,7 +833,7 @@
 	}
 
 	function CardDepositController($scope, $window, $q, events, dialogService,
-										 fiatService, applicationContext, notificationService) {
+			fiatService, applicationContext, notificationService) {
 		var deferred;
 		var ctrl = this;
 		ctrl.currencies = [new FiatCurrency('EURO', 'Euro'), new FiatCurrency('USD')];

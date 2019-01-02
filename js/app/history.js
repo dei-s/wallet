@@ -15,51 +15,51 @@
  ******************************************************************************/
 
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('app.history', ['app.shared']);
+	angular.module('app.history', ['app.shared']);
 })();
 
 (function () {
-    'use strict';
+	'use strict';
 
-    var TRANSACTIONS_TO_LOAD = 200;
+	var TRANSACTIONS_TO_LOAD = 200;
 
-    function HistoryController($scope, $interval, applicationContext, transactionLoadingService) {
-        var history = this;
-        var refreshPromise;
-        var refreshDelay = 10 * 1000;
+	function HistoryController($scope, $interval, applicationContext, transactionLoadingService) {
+		var history = this;
+		var refreshPromise;
+		var refreshDelay = 10 * 1000;
 
-        history.transactions = [];
+		history.transactions = [];
 
-        refreshTransactions();
+		refreshTransactions();
 
-        refreshPromise = $interval(refreshTransactions, refreshDelay);
+		refreshPromise = $interval(refreshTransactions, refreshDelay);
 
-        $scope.$on('$destroy', function () {
-            if (angular.isDefined(refreshPromise)) {
-                $interval.cancel(refreshPromise);
-                refreshPromise = undefined;
-            }
-        });
+		$scope.$on('$destroy', function () {
+			if (angular.isDefined(refreshPromise)) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = undefined;
+			}
+		});
 
-        function refreshTransactions() {
-            var txArray;
-            transactionLoadingService.loadTransactions(applicationContext.account, TRANSACTIONS_TO_LOAD)
-                .then(function (transactions) {
-                    txArray = transactions;
+		function refreshTransactions() {
+			var txArray;
+			transactionLoadingService.loadTransactions(applicationContext.account, TRANSACTIONS_TO_LOAD)
+				.then(function (transactions) {
+					txArray = transactions;
 
-                    return transactionLoadingService.refreshAssetCache(applicationContext.cache, transactions);
-                })
-                .then(function () {
-                    history.transactions = txArray;
-                });
-        }
-    }
+					return transactionLoadingService.refreshAssetCache(applicationContext.cache, transactions);
+				})
+				.then(function () {
+					history.transactions = txArray;
+				});
+		}
+	}
 
-    HistoryController.$inject = ['$scope', '$interval', 'applicationContext', 'transactionLoadingService'];
+	HistoryController.$inject = ['$scope', '$interval', 'applicationContext', 'transactionLoadingService'];
 
-    angular
-        .module('app.history')
-        .controller('historyController', HistoryController);
+	angular
+		.module('app.history')
+		.controller('historyController', HistoryController);
 })();
