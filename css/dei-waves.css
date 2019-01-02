@@ -365,8 +365,13 @@ md-autocomplete.fee-autocomplete button:hover md-icon path{fill:#fff}
 #register>form{margin:0 auto;padding-top:12px;padding-top:.75rem}
 #walletSeed{min-width:320px;resize:none}
 #walletName,#walletSeed{margin-top:8px;margin-top:.5rem}
-.wavesAccounts{padding:0;margin:0}
-.wavesAccounts>p{margin-top:-35px;padding-top:0}
+.accounts-list{
+	padding:0;
+	margin:0;
+}
+.accounts-list>p{
+	padding-top:0;
+}
 #import_account{margin-top:8px;margin-top:.5rem}
 #errorPasswordLogin{margin:16px;margin:1rem;padding:16px;padding:1rem;color:red}
 .loginAccountDiv{display:block;height:inherit}
