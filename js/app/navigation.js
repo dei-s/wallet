@@ -255,7 +255,7 @@
 
 	angular
 		.module('app.navigation')
-		.directive('baseTab', function () {
+		.directive('wavesTab', function () {
 			return {
 				restrict: 'A',
 				controller: ['$scope', 'dialogService', TabController],
