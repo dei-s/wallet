@@ -30,7 +30,7 @@
 			alt="Mainnet"
 			title="Подключиться к сети WAVES.MAINNET">
 		<img
-			onclick="document.location.href = 'mir';"
+			onclick="document.location.href = 'mir.html';"
 			src="img/wB-bg-MIR-purple.svg"
 			alt="Mirnet"
 			title="Подключиться к сети MIRNET"
@@ -1162,17 +1162,30 @@
 					<div id="app" class="flex-item">
 						<div class="msg-wrapper flex-item bordered" ref="msgWrapper">
 							<table id="msg-list">
-								<tr v-for="msg in messages">
-									<td>
-										{{ formatTime(msg.time)}}
-									</td>
-									<td>
-										<a :href="'https://wavesexplorer.com/tx/' + msg.id">{{ formatSender(msg.sender) }}</a>:
-									</td>
-									<td>
-										{{ msg.text }} ({{ (msg.amount / 100000000).toLocaleString('ru-ru', {maximumSignificantDigits: 20}) }} МИР)
-									</td>
-								</tr>
+								<thead>
+									<tr>
+										<td>Time</td>
+										<td>Sender</td>
+										<td>Message</td>
+										<td>Amount</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr v-for="msg in messages">
+										<td>
+											{{ formatTime(msg.time)}}
+										</td>
+										<td>
+											<a :href="'https://wavesexplorer.com/tx/' + msg.id" target="_blank">{{ formatSender(msg.sender) }}</a>:
+										</td>
+										<td>
+											{{ msg.text }}
+										</td>
+										<td>
+											{{ (msg.amount / 100000000).toLocaleString('ru-ru', {maximumSignificantDigits: 20}) }} МИР
+										</td>
+									</tr>
+								</tbody>
 							</table>
 						</div>
 					</div>

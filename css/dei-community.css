@@ -8,6 +8,34 @@ input {
 	outline: none;
 	border: none;
 }
+#msg-list {
+	border: 1px solid black;
+	border-spacing: 0;
+	height: auto;
+	margin-bottom: 2rem;
+	width: 100%;
+}
+#msg-list thead {
+	background-color: #333333;
+	border: 0;
+	color: white;
+	font-size: 1.2rem;
+	text-align: center;
+}
+#msg-list td {
+	vertical-align: middle;
+	text-align: center;
+	padding: .5rem;
+}
+#msg-list tbody tr {
+	transition: all .2s ease;
+}
+#msg-list tbody tr:nth-child(odd) {
+	background-color: #f0f0f0;
+}
+#msg-list tbody tr:nth-child(2n) {
+	background-color: white;
+}
 .input-wrapper {
 	align-items: center;
 	justify-content: space-between;

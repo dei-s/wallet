@@ -1,14 +1,25 @@
+var MSG_NODE_ADDRESS = DEI_NODE_ADDRESS;
+if (isMir()) {
+	var MSG_AMOUNT_MIN = 100000000; // 1 DEI
+	var MSG_ASSET_ID = '';
+	var MSG_WALLET_ADDR = '3MbnsvKVdTgxKFXw49iuqs8K6kGsUWoXDei'; // DEI
+} else {
+	var MSG_AMOUNT_MIN = 100000; // 0.001 МИР
+	var MSG_ASSET_ID = 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ'; // МИР
+	var MSG_WALLET_ADDR = '3PEPpJoJNqrU6T6AAdXB3yMzUseEaUPniCw'; // DEI
+}
+
 var app = new Vue({
 	el: '#app',
 	data: {
 		message: '',
 		pinnedMessage: {},
 		messages: [],
-		wall: '3PEPpJoJNqrU6T6AAdXB3yMzUseEaUPniCw',
-		node: 'https://nodes.wavesplatform.com',
-		amount: '0.001',
+		wall: MSG_WALLET_ADDR,
+		node: DEI_NODE_ADDRESS,
+		amount: '0.01',
 		fee: '0.001',
-		minAmount: 1,
+		minAmount: MSG_AMOUNT_MIN,
 		pinAmount: 1000000,
 		last: 0
 	},
@@ -44,29 +55,33 @@ var app = new Vue({
 			}
 		},
 		update: async function() {
-			let lastTx = await this.loadPosts(1);
-			let lastTime = lastTx[0][0].timestamp;
-			if (lastTime != this.last) {
-				let data = await this.loadPosts(10000);
-				this.messages = [];
-				await data[0].forEach(item => {
-					if (item.attachment && item.amount >= this.minAmount && item.assetId == 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ') {
-						let msg = this.decode(item.attachment);
-						this.messages.unshift({
-							sender: item.sender,
-							text: msg,
-							time: item.timestamp,
-							amount: item.amount,
-							id: item.id
-						});
-						let pinned = this.messages.find(element => {
-							return element.amount > this.pinAmount ? element : false;
-						});
-						this.pinnedMessage = pinned ? pinned : '';
-					}
-				});
-				this.$refs.msgWrapper.scrollTop = this.$refs.msgWrapper.scrollHeight;
-				this.last = lastTime.valueOf();
+			if (isMir()) {
+				// ...
+			} else {
+				let lastTx = await this.loadPosts(1);
+				let lastTime = lastTx[0][0].timestamp;
+				if (lastTime != this.last) {
+					let data = await this.loadPosts(10000);
+					this.messages = [];
+					await data[0].forEach(item => {
+						if (item.attachment && item.amount >= this.minAmount && item.assetId == MSG_ASSET_ID) {
+							let msg = this.decode(item.attachment);
+							this.messages.push({
+								sender: item.sender,
+								text: msg,
+								time: item.timestamp,
+								amount: item.amount,
+								id: item.id
+							});
+							let pinned = this.messages.find(element => {
+								return element.amount > this.pinAmount ? element : false;
+							});
+							this.pinnedMessage = pinned ? pinned : '';
+						}
+					});
+					this.$refs.msgWrapper.scrollTop = this.$refs.msgWrapper.scrollHeight;
+					this.last = lastTime.valueOf();
+				}
 			}
 		},
 		findMax: function(arr) {
@@ -84,24 +99,46 @@ var app = new Vue({
 		},
 		send: async function() {
 			let msg = this.message;
-			let params = {
-				type: 4,
-				data: {
-					amount: {
-						assetId: 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ',
-						tokens: this.amount
-					},
-					fee: {
-						assetId: 'WAVES',
-						tokens: this.fee
-					},
-					recipient: this.wall,
-					attachment: msg
+			if (isMir()) {
+				let params = {
+					type: 4,
+					data: {
+						amount: {
+							assetId: 'MIR',
+							tokens: this.amount
+						},
+						fee: {
+							assetId: 'MIR',
+							tokens: this.fee
+						},
+						recipient: this.wall,
+						attachment: msg
+					}
+				}
+			} else {
+				let params = {
+					type: 4,
+					data: {
+						amount: {
+							assetId: 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ',
+							tokens: this.amount
+						},
+						fee: {
+							assetId: 'WAVES',
+							tokens: this.fee
+						},
+						recipient: this.wall,
+						attachment: msg
+					}
 				}
 			}
 			if (this.checkKeeper()) {
 				try {
-					let res = await window.Waves.signAndPublishTransaction(params);
+					if (isMir()) {
+						let res = await window.Mir.signAndPublishTransaction(params);
+					} else {
+						let res = await window.Waves.signAndPublishTransaction(params);
+					}
 					this.message = '';
 				} catch (err) {
 					alert(err.message);
@@ -111,7 +148,11 @@ var app = new Vue({
 			}
 		},
 		checkKeeper: function() {
-			return typeof window.Waves !== 'undefined';
+			if (isMir()) {
+				return typeof window.Mir !== 'undefined';
+			} else {
+				return typeof window.Waves !== 'undefined';
+			}
 		}
 	}
 });
