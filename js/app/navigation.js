@@ -15,245 +15,245 @@
  ******************************************************************************/
 
 (function () {
-    'use strict';
+	'use strict';
 
-    angular
-        .module('app.navigation')
-        .controller('navigationController', ['$scope', function ($scope) {
-            var nav = this;
+	angular
+		.module('app.navigation')
+		.controller('navigationController', ['$scope', function ($scope) {
+			var nav = this;
 
-            nav.currentTab = 'wallet';
-            nav.changeTab = changeTab;
+			nav.currentTab = 'wallet';
+			nav.changeTab = changeTab;
 
-            function changeTab (pageId) {
-                nav.currentTab = pageId;
-            }
-        }]);
+			function changeTab (pageId) {
+				nav.currentTab = pageId;
+			}
+		}]);
 })();
 
 (function () {
-    'use strict';
+	'use strict';
 
-    function MainMenuController($scope, $interval, events, applicationContext,
-                                cryptoService, dialogService, notificationService, apiService) {
-        var ctrl = this,
-            refreshPromise,
-            delayRefresh = 10 * 1000;
+	function MainMenuController($scope, $interval, events, applicationContext,
+								cryptoService, dialogService, notificationService, apiService) {
+		var ctrl = this,
+			refreshPromise,
+			delayRefresh = 10 * 1000;
 
-        ctrl.blockHeight = 0;
-        ctrl.address = applicationContext.account.address;
-        ctrl.addressQr = 'waves://' + ctrl.address;
+		ctrl.blockHeight = 0;
+		ctrl.address = applicationContext.account.address;
+		ctrl.addressQr = 'waves://' + ctrl.address;
 
-        function initializeBackupFields() {
-            ctrl.seed = applicationContext.account.seed;
-            ctrl.encodedSeed = cryptoService.base58.encode(converters.stringToByteArray(ctrl.seed));
-            ctrl.publicKey = applicationContext.account.keyPair.public;
-            ctrl.privateKey = applicationContext.account.keyPair.private;
-        }
+		function initializeBackupFields() {
+			ctrl.seed = applicationContext.account.seed;
+			ctrl.encodedSeed = cryptoService.base58.encode(converters.stringToByteArray(ctrl.seed));
+			ctrl.publicKey = applicationContext.account.keyPair.public;
+			ctrl.privateKey = applicationContext.account.keyPair.private;
+		}
 
-        function buildBackupClipboardText() {
-            var text = 'Seed: ' + ctrl.seed + '\n';
-            text += 'Encoded seed: ' + ctrl.encodedSeed + '\n';
-            text += 'Private key: ' + ctrl.privateKey + '\n';
-            text += 'Public key: ' + ctrl.publicKey + '\n';
-            text += 'Address: ' + ctrl.address;
-            return text;
-        }
+		function buildBackupClipboardText() {
+			var text = 'Seed: ' + ctrl.seed + '\n';
+			text += 'Encoded seed: ' + ctrl.encodedSeed + '\n';
+			text += 'Private key: ' + ctrl.privateKey + '\n';
+			text += 'Public key: ' + ctrl.publicKey + '\n';
+			text += 'Address: ' + ctrl.address;
+			return text;
+		}
 
-        refreshBlockHeight();
-        refreshPromise = $interval(refreshBlockHeight, delayRefresh);
+		refreshBlockHeight();
+		refreshPromise = $interval(refreshBlockHeight, delayRefresh);
 
-        $scope.$on('$destroy', function () {
-            if (angular.isDefined(refreshPromise)) {
-                $interval.cancel(refreshPromise);
-                refreshPromise = undefined;
-            }
-        });
+		$scope.$on('$destroy', function () {
+			if (angular.isDefined(refreshPromise)) {
+				$interval.cancel(refreshPromise);
+				refreshPromise = undefined;
+			}
+		});
 
-        ctrl.showAddressQr = showAddressQr;
-        ctrl.showBackupDialog = showBackupDialog;
-        ctrl.showProfileDialog = showProfileDialog;
-        ctrl.backup = backup;
+		ctrl.showAddressQr = showAddressQr;
+		ctrl.showBackupDialog = showBackupDialog;
+		ctrl.showProfileDialog = showProfileDialog;
+		ctrl.backup = backup;
 
-        function showAddressQr() {
-            dialogService.open('#address-qr-modal');
-        }
+		function showAddressQr() {
+			dialogService.open('#address-qr-modal');
+		}
 
-        function showProfileDialog() {
-            $scope.$broadcast(events.NAVIGATION_CREATE_ALIAS, {});
-        }
+		function showProfileDialog() {
+			$scope.$broadcast(events.NAVIGATION_CREATE_ALIAS, {});
+		}
 
-        function showBackupDialog() {
-            initializeBackupFields();
-            dialogService.open('#header-wPop-backup');
-        }
+		function showBackupDialog() {
+			initializeBackupFields();
+			dialogService.open('#header-wPop-backup');
+		}
 
-        function backup() {
-            var clipboard = new Clipboard('#backupForm', {
-                text: function () {
-                    return buildBackupClipboardText();
-                }
-            });
+		function backup() {
+			var clipboard = new Clipboard('#backupForm', {
+				text: function () {
+					return buildBackupClipboardText();
+				}
+			});
 
-            clipboard.on('success', function(e) {
-                notificationService.notice('Account backup has been copied to clipboard');
-                e.clearSelection();
-            });
+			clipboard.on('success', function(e) {
+				notificationService.notice('Account backup has been copied to clipboard');
+				e.clearSelection();
+			});
 
-            angular.element('#backupForm').click();
-            clipboard.destroy();
-        }
+			angular.element('#backupForm').click();
+			clipboard.destroy();
+		}
 
-        function refreshBlockHeight() {
-            apiService.blocks.height().then(function (response) {
-                ctrl.blockHeight = response.height;
-                applicationContext.blockHeight = response.height;
-            });
-        }
-    }
+		function refreshBlockHeight() {
+			apiService.blocks.height().then(function (response) {
+				ctrl.blockHeight = response.height;
+				applicationContext.blockHeight = response.height;
+			});
+		}
+	}
 
-    MainMenuController.$inject = ['$scope', '$interval', 'navigation.events', 'applicationContext',
-                                  'cryptoService', 'dialogService', 'notificationService', 'apiService'];
+	MainMenuController.$inject = ['$scope', '$interval', 'navigation.events', 'applicationContext',
+								  'cryptoService', 'dialogService', 'notificationService', 'apiService'];
 
-    angular
-        .module('app.navigation')
-        .controller('mainMenuController', MainMenuController);
+	angular
+		.module('app.navigation')
+		.controller('mainMenuController', MainMenuController);
 })();
 
 (function () {
-    'use strict';
+	'use strict';
 
-    var DEFAULT_FEE = Money.fromTokens(0.001, Currency.BASE);
-    var ALIAS_MINIMUM_LENGTH = 4;
-    var ALIAS_MAXIMUM_LENGTH = 30;
+	var DEFAULT_FEE = Money.fromTokens(0.001, Currency.BASE);
+	var ALIAS_MINIMUM_LENGTH = 4;
+	var ALIAS_MAXIMUM_LENGTH = 30;
 
-    function CreateAliasController($scope, $timeout, events, applicationContext,
-                                        dialogService, notificationService, transactionBroadcast,
-                                        formattingService, aliasRequestService, apiService) {
-        var ctrl = this;
+	function CreateAliasController($scope, $timeout, events, applicationContext,
+										dialogService, notificationService, transactionBroadcast,
+										formattingService, aliasRequestService, apiService) {
+		var ctrl = this;
 
-        ctrl.fee = DEFAULT_FEE;
-        ctrl.aliasList = null;
+		ctrl.fee = DEFAULT_FEE;
+		ctrl.aliasList = null;
 
-        ctrl.validationOptions = {
-            onfocusout: false,
-            rules: {
-                aliasName: {
-                    required: true,
-                    minlength: ALIAS_MINIMUM_LENGTH,
-                    maxlength: ALIAS_MAXIMUM_LENGTH
-                }
-            },
-            messages: {
-                aliasName: {
-                    required: 'Symbolic name is required',
-                    minlength: 'Alias name is too short. Please enter at least ' + ALIAS_MINIMUM_LENGTH + ' symbols',
-                    maxlength: 'Alias name is too long. Please use no more than ' + ALIAS_MAXIMUM_LENGTH + ' symbols'
-                }
-            }
-        };
+		ctrl.validationOptions = {
+			onfocusout: false,
+			rules: {
+				aliasName: {
+					required: true,
+					minlength: ALIAS_MINIMUM_LENGTH,
+					maxlength: ALIAS_MAXIMUM_LENGTH
+				}
+			},
+			messages: {
+				aliasName: {
+					required: 'Symbolic name is required',
+					minlength: 'Alias name is too short. Please enter at least ' + ALIAS_MINIMUM_LENGTH + ' symbols',
+					maxlength: 'Alias name is too long. Please use no more than ' + ALIAS_MAXIMUM_LENGTH + ' symbols'
+				}
+			}
+		};
 
-        ctrl.broadcast = new transactionBroadcast.instance(apiService.alias.create, function (tx) {
-            var formattedTime = formattingService.formatTimestamp(tx.timestamp),
-                displayMessage = 'Created alias \'' + tx.alias + '\'<br/>Date: ' + formattedTime;
-            notificationService.notice(displayMessage);
-        });
+		ctrl.broadcast = new transactionBroadcast.instance(apiService.alias.create, function (tx) {
+			var formattedTime = formattingService.formatTimestamp(tx.timestamp),
+				displayMessage = 'Created alias \'' + tx.alias + '\'<br/>Date: ' + formattedTime;
+			notificationService.notice(displayMessage);
+		});
 
-        ctrl.confirmCreateAlias = confirmCreateAlias;
-        ctrl.broadcastTransaction = broadcastTransaction;
+		ctrl.confirmCreateAlias = confirmCreateAlias;
+		ctrl.broadcastTransaction = broadcastTransaction;
 
-        $scope.$on(events.NAVIGATION_CREATE_ALIAS, function () {
-            reset();
-            getExistingAliases();
-            dialogService.open('#create-alias-dialog');
-        });
+		$scope.$on(events.NAVIGATION_CREATE_ALIAS, function () {
+			reset();
+			getExistingAliases();
+			dialogService.open('#create-alias-dialog');
+		});
 
-        function getExistingAliases() {
-            apiService.alias
-                .getByAddress(applicationContext.account.address)
-                .then(function (aliasList) {
-                    ctrl.aliasList = aliasList;
-                });
-        }
+		function getExistingAliases() {
+			apiService.alias
+				.getByAddress(applicationContext.account.address)
+				.then(function (aliasList) {
+					ctrl.aliasList = aliasList;
+				});
+		}
 
-        function broadcastTransaction () {
-            ctrl.broadcast.broadcast();
-        }
+		function broadcastTransaction () {
+			ctrl.broadcast.broadcast();
+		}
 
-        function confirmCreateAlias (form) {
-            if (!form.validate(ctrl.validationOptions)) {
-                return false;
-            }
+		function confirmCreateAlias (form) {
+			if (!form.validate(ctrl.validationOptions)) {
+				return false;
+			}
 
-            var createAlias = {
-                alias: ctrl.alias,
-                fee: ctrl.fee
-            };
+			var createAlias = {
+				alias: ctrl.alias,
+				fee: ctrl.fee
+			};
 
-            var sender = {
-                publicKey: applicationContext.account.keyPair.public,
-                privateKey: applicationContext.account.keyPair.private
-            };
+			var sender = {
+				publicKey: applicationContext.account.keyPair.public,
+				privateKey: applicationContext.account.keyPair.private
+			};
 
-            // Create the transaction and waiting for confirmation
-            ctrl.broadcast.setTransaction(aliasRequestService.buildCreateAliasRequest(createAlias, sender));
+			// Create the transaction and waiting for confirmation
+			ctrl.broadcast.setTransaction(aliasRequestService.buildCreateAliasRequest(createAlias, sender));
 
-            // Open confirmation dialog (async because this method is called while another dialog is open)
-            $timeout(function () {
-                dialogService.open('#create-alias-confirmation');
-            }, 1);
+			// Open confirmation dialog (async because this method is called while another dialog is open)
+			$timeout(function () {
+				dialogService.open('#create-alias-confirmation');
+			}, 1);
 
-            return true;
-        }
+			return true;
+		}
 
-        function reset () {
-            ctrl.alias = '';
-        }
-    }
+		function reset () {
+			ctrl.alias = '';
+		}
+	}
 
-    CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
-                                          'dialogService', 'notificationService', 'transactionBroadcast',
-                                          'formattingService', 'aliasRequestService', 'apiService'];
+	CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
+										  'dialogService', 'notificationService', 'transactionBroadcast',
+										  'formattingService', 'aliasRequestService', 'apiService'];
 
-    angular
-        .module('app.navigation')
-        .controller('createAliasController', CreateAliasController);
+	angular
+		.module('app.navigation')
+		.controller('createAliasController', CreateAliasController);
 })();
 
 (function () {
-    'use strict';
+	'use strict';
 
-    function TabController($scope, dialogService) {
-        $scope.isSelected = function () {
-            return $scope.pageId === $scope.currentPageId;
-        };
+	function TabController($scope, dialogService) {
+		$scope.isSelected = function () {
+			return $scope.pageId === $scope.currentPageId;
+		};
 
-        $scope.onClick = function () {
-            $scope.onSelect({pageId: $scope.pageId});
+		$scope.onClick = function () {
+			$scope.onSelect({pageId: $scope.pageId});
 
-            // cleaning unused modal dialog divs, created by previous tab
-            dialogService.cleanup();
-        };
-    }
+			// cleaning unused modal dialog divs, created by previous tab
+			dialogService.cleanup();
+		};
+	}
 
-    function TabLink(scope, element) {
-        element.addClass('tabs-radio');
-    }
+	function TabLink(scope, element) {
+		element.addClass('tabs-radio');
+	}
 
-    angular
-        .module('app.navigation')
-        .directive('baseTab', function () {
-            return {
-                restrict: 'A',
-                controller: ['$scope', 'dialogService', TabController],
-                scope: {
-                    pageId: '@',
-                    caption: '<',
-                    onSelect: '&',
-                    currentPageId: '<'
-                },
-                link: TabLink,
-                templateUrl: 'navigation/tab.directive'
-            };
-        });
+	angular
+		.module('app.navigation')
+		.directive('baseTab', function () {
+			return {
+				restrict: 'A',
+				controller: ['$scope', 'dialogService', TabController],
+				scope: {
+					pageId: '@',
+					caption: '<',
+					onSelect: '&',
+					currentPageId: '<'
+				},
+				link: TabLink,
+				templateUrl: 'navigation/tab.directive'
+			};
+		});
 })();
