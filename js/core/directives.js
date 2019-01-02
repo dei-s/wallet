@@ -15,6 +15,6 @@
  ******************************************************************************/
 
 (function () {
-    'use strict';
-    angular.module('waves.core.directives', []);
+	'use strict';
+	angular.module('waves.core.directives', []);
 })();
