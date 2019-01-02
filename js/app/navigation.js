@@ -14,6 +14,15 @@
  *                                                                            *
  ******************************************************************************/
 
+(function() {
+	'use strict';
+
+	angular.module('app.navigation', ['waves.core.services', 'app.ui', 'app.shared'])
+		.constant('navigation.events', {
+			NAVIGATION_CREATE_ALIAS: 'navigation-create-alias'
+		});
+})();
+
 (function () {
 	'use strict';
 
@@ -35,7 +44,7 @@
 	'use strict';
 
 	function MainMenuController($scope, $interval, events, applicationContext,
-								cryptoService, dialogService, notificationService, apiService) {
+			cryptoService, dialogService, notificationService, apiService) {
 		var ctrl = this,
 			refreshPromise,
 			delayRefresh = 10 * 1000;
@@ -117,7 +126,7 @@
 	}
 
 	MainMenuController.$inject = ['$scope', '$interval', 'navigation.events', 'applicationContext',
-								  'cryptoService', 'dialogService', 'notificationService', 'apiService'];
+			'cryptoService', 'dialogService', 'notificationService', 'apiService'];
 
 	angular
 		.module('app.navigation')
@@ -132,8 +141,8 @@
 	var ALIAS_MAXIMUM_LENGTH = 30;
 
 	function CreateAliasController($scope, $timeout, events, applicationContext,
-										dialogService, notificationService, transactionBroadcast,
-										formattingService, aliasRequestService, apiService) {
+			dialogService, notificationService, transactionBroadcast,
+			formattingService, aliasRequestService, apiService) {
 		var ctrl = this;
 
 		ctrl.fee = DEFAULT_FEE;
@@ -216,8 +225,8 @@
 	}
 
 	CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
-										  'dialogService', 'notificationService', 'transactionBroadcast',
-										  'formattingService', 'aliasRequestService', 'apiService'];
+			'dialogService', 'notificationService', 'transactionBroadcast',
+			'formattingService', 'aliasRequestService', 'apiService'];
 
 	angular
 		.module('app.navigation')
