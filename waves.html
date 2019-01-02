@@ -344,15 +344,6 @@
 				<span base-tab
 					on-select="nav.changeTab(pageId)"
 					current-page-id="nav.currentTab"
-					page-id="leasing"
-					caption="'Waves leasing tab'"
-					tooltipster
-					tooltip-html
-					tooltip-theme="tooltipster-theme3"
-					tooltip-title="<center><u>Leasing</u></center><br/>Lease your Waves<br/>to another wallet."></span>
-				<span base-tab
-					on-select="nav.changeTab(pageId)"
-					current-page-id="nav.currentTab"
 					page-id="history"
 					caption="'History tab'"
 					tooltipster
@@ -1028,12 +1019,6 @@
 				</waves-page>
 				<!-- / DEX TAB -->
 
-				<!-- LEASING TAB -->
-				<waves-page ng-switch-when="leasing" page-title="Leasing">
-					<waves-leasing></waves-leasing>
-				</waves-page>
-				<!-- / LEASING TAB -->
-
 				<!-- VOTING TAB -->
 				<div id="mBB-voting" class="mBB-content" ng-switch-when="voting">
 					<div class="phContent">
@@ -1256,7 +1241,6 @@ function isMir() {
 <script src="js/app/wallet.js"></script>
 <script src="js/app/tokens.js"></script>
 <script src="js/app/dex.js"></script>
-<script src="js/app/leasing.js"></script>
 <script src="js/app/history.js"></script>
 <script src="js/app/community.js"></script>
 <script src="js/app/portfolio.js"></script>

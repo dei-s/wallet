@@ -60,7 +60,6 @@ var app = angular.module('app', [
 	'app.wallet',
 	'app.tokens',
 	'app.dex',
-	'app.leasing',
 	'app.history',
 	'app.community',
 	'app.portfolio'
