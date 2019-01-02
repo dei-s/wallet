@@ -54,6 +54,14 @@ var Currency = (function () {
 			verified: true
 		});
 		var BASE = MIR;
+
+		var LBR = new Currency({
+			id: '55WhEqBaGb6Z9DK3bHJQkk4jEDwRejc1xJttyxiykMnL',
+			displayName: 'LBR',
+			shortName: 'LBR',
+			precision: 8,
+			verified: true
+		});
 	} else {
 		var WAVES = new Currency({
 			id: '',
@@ -63,55 +71,55 @@ var Currency = (function () {
 			verified: true
 		});
 		var BASE = WAVES;
+
+		var BTC = new Currency({
+			id: '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS',
+			displayName: 'Bitcoin',
+			shortName: 'BTC',
+			precision: 8,
+			verified: true
+		});
+
+		var USD = new Currency({
+			id: 'Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck',
+			displayName: 'US Dollar',
+			shortName: 'USD',
+			precision: 2,
+			verified: true
+		});
+
+		var EUR = new Currency({
+			id: 'Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU',
+			displayName: 'Euro',
+			shortName: 'EUR',
+			precision: 2,
+			verified: true
+		});
+
+		var DEIP = new Currency({
+			id: '8Wj49jM8y9qfFx2QG6HxQXbiaxdnTt8EGm8mEqXJWFL4',
+			displayName: 'Platform',
+			shortName: 'DEIP',
+			precision: 2,
+			verified: true
+		});
+
+		var LIBRE = new Currency({
+			id: '8qqoeygkNFqSjqf8JrB1LtzkCPTS3zJPe3LHDotTJvdH',
+			displayName: 'Libre',
+			shortName: 'LIBRE',
+			precision: 1,
+			verified: true
+		});
+
+		var MIR = new Currency({
+			id: 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ',
+			displayName: 'МИР',
+			shortName: 'MIR',
+			precision: 8,
+			verified: true
+		});
 	}
-
-	var BTC = new Currency({
-		id: '8LQW8f7P5d5PZM7GtZEBgaqRPGSzS3DfPuiXrURJ4AJS',
-		displayName: 'Bitcoin',
-		shortName: 'BTC',
-		precision: 8,
-		verified: true
-	});
-
-	var USD = new Currency({
-		id: 'Ft8X1v1LTa1ABafufpaCWyVj8KkaxUWE6xBhW6sNFJck',
-		displayName: 'US Dollar',
-		shortName: 'USD',
-		precision: 2,
-		verified: true
-	});
-
-	var EUR = new Currency({
-		id: 'Gtb1WRznfchDnTh37ezoDTJ4wcoKaRsKqKjJjy7nm2zU',
-		displayName: 'Euro',
-		shortName: 'EUR',
-		precision: 2,
-		verified: true
-	});
-
-	var DEIP = new Currency({
-		id: '8Wj49jM8y9qfFx2QG6HxQXbiaxdnTt8EGm8mEqXJWFL4',
-		displayName: 'Platform',
-		shortName: 'DEIP',
-		precision: 2,
-		verified: true
-	});
-
-	var LIBRE = new Currency({
-		id: '8qqoeygkNFqSjqf8JrB1LtzkCPTS3zJPe3LHDotTJvdH',
-		displayName: 'Libre',
-		shortName: 'LIBRE',
-		precision: 1,
-		verified: true
-	});
-
-	var MIR = new Currency({
-		id: 'HdPJha3Ekn1RUR2K9RrY7SG9xK1b21AHPwkL8pcwTmSZ',
-		displayName: 'МИР',
-		shortName: 'MIR',
-		precision: 8,
-		verified: true
-	});
 
 	function isCached(assetId) {
 		return currencyCache.hasOwnProperty(assetId);
@@ -120,31 +128,35 @@ var Currency = (function () {
 	function invalidateCache() {
 		currencyCache = {};
 		currencyCache[BASE.id] = BASE;
-		currencyCache[BTC.id] = BTC;
-		currencyCache[USD.id] = USD;
-		currencyCache[EUR.id] = EUR;
-		currencyCache[DEIP.id] = DEIP;
-		currencyCache[LIBRE.id] = LIBRE;
-		currencyCache[MIR.id] = MIR;
-		if (!isMir()) {
+		if (isMir()) {
+			currencyCache[LBR.id] = LBR;
+		} else {
+			currencyCache[BTC.id] = BTC;
+			currencyCache[USD.id] = USD;
+			currencyCache[EUR.id] = EUR;
+			currencyCache[DEIP.id] = DEIP;
+			currencyCache[LIBRE.id] = LIBRE;
+			currencyCache[MIR.id] = MIR;
 			currencyCache[WAVES.id] = WAVES;
 		}
 	}
 
 	invalidateCache();
 
+	function Create(data) {
+		// if currency data.id is not set - it's a temporary instance
+		if (!_.has(data, 'id')) {
+			return new Currency(data);
+		}
+		if (!currencyCache[data.id]) {
+			currencyCache[data.id] = new Currency(data);
+		}
+		return currencyCache[data.id];
+	}
+
 	if (isMir()) {
 		return {
-			create: function (data) {
-				// if currency data.id is not set - it's a temporary instance
-				if (!_.has(data, 'id')) {
-					return new Currency(data);
-				}
-				if (!currencyCache[data.id]) {
-					currencyCache[data.id] = new Currency(data);
-				}
-				return currencyCache[data.id];
-			},
+			create: Create,
 			invalidateCache: invalidateCache,
 			isCached: isCached,
 			BASE: BASE,
@@ -152,30 +164,19 @@ var Currency = (function () {
 			MIR: MIR
 		};
 	} else {
-	return {
-		create: function (data) {
-			// if currency data.id is not set - it's a temporary instance
-			if (!_.has(data, 'id')) {
-				return new Currency(data);
-			}
-
-			if (!currencyCache[data.id]) {
-				currencyCache[data.id] = new Currency(data);
-			}
-
-			return currencyCache[data.id];
-		},
-		invalidateCache: invalidateCache,
-		isCached: isCached,
-		BASE: BASE,
-		BTC: BTC,
-		USD: USD,
-		EUR: EUR,
-		DEIP: DEIP,
-		LIBRE: LIBRE,
-		MIR: MIR,
-		WAVES: WAVES
-	};
+		return {
+			create: Create,
+			invalidateCache: invalidateCache,
+			isCached: isCached,
+			BASE: BASE,
+			BTC: BTC,
+			USD: USD,
+			EUR: EUR,
+			DEIP: DEIP,
+			LIBRE: LIBRE,
+			MIR: MIR,
+			WAVES: WAVES
+		};
 	}
 })();
 

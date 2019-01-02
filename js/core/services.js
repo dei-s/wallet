@@ -1105,7 +1105,11 @@
 			if (angular.isUndefined(constants.NETWORK_NAME))
 				throw new Error('Network name hasn\'t been configured');
 
-			var $key = 'Waves' + constants.NETWORK_NAME;
+			if (isMir()) {
+				var $key = 'Mir' + constants.NETWORK_NAME;
+			} else {
+				var $key = 'Waves' + constants.NETWORK_NAME;
+			}
 
 			this.saveState = function(state) {
 				var serialized = angular.toJson(state);
@@ -1423,10 +1427,6 @@
 		}]);
 })();
 
-
-// <-- The module was here: waves.core.filter.formatting
-
-
 (function () {
 	'use strict';
 
@@ -1443,14 +1443,21 @@
 			 * @returns {string} currency code
 			 */
 			this.platformCurrencyCode = function (currency) {
-				switch (currency.id) {
-					case Currency.BTC.id:
-						return 'WBTC';
-
-					case Currency.WAVES.id:
-						return 'WAVES';
+				if (isMir()) {
+					switch (currency.id) {
+						case Currency.LBR.id:
+							return 'LBR';
+						case Currency.MIR.id:
+							return 'MIR';
+					}
+				} else {
+					switch (currency.id) {
+						case Currency.BTC.id:
+							return 'WBTC';
+						case Currency.WAVES.id:
+							return 'WAVES';
+					}
 				}
-
 				unsupportedCurrency(currency);
 			};
 
@@ -1460,14 +1467,21 @@
 			 * @returns {string} currency code
 			 */
 			this.gatewayCurrencyCode = function (currency) {
-				switch (currency.id) {
-					case Currency.BTC.id:
-						return 'BTC';
-
-					case Currency.WAVES.id:
-						return 'WAVES';
+				if (isMir()) {
+					switch (currency.id) {
+						case Currency.LBR.id:
+							return 'LBR';
+						case Currency.MIR.id:
+							return 'MIR';
+					}
+				} else {
+					switch (currency.id) {
+						case Currency.BTC.id:
+							return 'BTC';
+						case Currency.WAVES.id:
+							return 'WAVES';
+					}
 				}
-
 				unsupportedCurrency(currency);
 			};
 		}]);
@@ -1610,7 +1624,11 @@
 		DEFAULT_LIMIT = 50;
 
 	function serializeId(id) {
-		return id === '' ? 'WAVES' : id;
+		if (isMir()) {
+			return id === '' ? 'MIR' : id;
+		} else {
+			return id === '' ? 'WAVES' : id;
+		}
 	}
 
 	function DatafeedApiService(rest) {
