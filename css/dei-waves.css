@@ -163,7 +163,6 @@ body{font-family: Roboto;color: #464646;:-webkit-font-smoothing:antialiased!impo
 	margin:0 auto;
 	/*overflow:hidden;*/
 }
-#mainBody{overflow-y:scroll}
 #mBBody{display:-ms-flexbox;display:flex;-ms-flex-line-pack:center;align-content:center;position:relative;width:100%!important;min-height:100%;padding-bottom:16px;padding-bottom:1rem;margin:0 auto}
 #LBmBB-community,#LBmBB-exchange,#LBmBB-history,#LBmBB-messages,#LBmBB-portfolio,#LBmBB-voting{display:none}
 .dialog-confirmation{text-align:center}
