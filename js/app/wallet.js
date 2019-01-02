@@ -557,6 +557,8 @@
 			ctrl.assetBalance = eventData.assetBalance;
 			ctrl.baseBalance = eventData.baseBalance;
 
+			if (isMir()) {
+			} else {
 			if (ctrl.assetBalance.currency === Currency.BTC) {
 				withdrawCrypto();
 			} else if (ctrl.assetBalance.currency === Currency.EUR) {
@@ -565,6 +567,7 @@
 				withdrawUSD();
 			} else {
 				$scope.home.featureUnderDevelopment();
+			}
 			}
 		});
 
@@ -652,7 +655,7 @@
 			}
 
 			try {
-				var withdrawCost = Money.fromTokens(ctrl.autocomplete.getFeeAmount(), Currency.WAVES);
+				var withdrawCost = Money.fromTokens(ctrl.autocomplete.getFeeAmount(), Currency.BASE);
 				validateWithdrawCost(withdrawCost, ctrl.baseBalance);
 				if (ctrl.assetBalance.currency === Currency.BTC) {
 					validateRecipientBTCAddress(ctrl.recipient);
@@ -663,7 +666,7 @@
 			}
 
 			var total = Money.fromTokens(ctrl.total, ctrl.assetBalance.currency);
-			var fee = Money.fromTokens(ctrl.autocomplete.getFeeAmount(), Currency.WAVES);
+			var fee = Money.fromTokens(ctrl.autocomplete.getFeeAmount(), Currency.BASE);
 			ctrl.confirm.amount = total;
 			ctrl.confirm.fee = fee;
 			ctrl.confirm.recipient = ctrl.recipient;

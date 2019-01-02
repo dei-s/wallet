@@ -72,15 +72,15 @@ function AngularApplicationConfig($provide, $compileProvider, $validatorProvider
 
 	$provide.constant(networkConstants,
 		angular.extend(networkConstants, {
-			NETWORK_NAME: 'mainnet',
-			NETWORK_CODE: 'W'
+			NETWORK_NAME: DEI_NETWORK_NAME,
+			NETWORK_CODE: DEI_NETWORK_CODE
 		}));
 	$provide.constant(applicationSettings,
 		angular.extend(applicationSettings, {
-			CLIENT_VERSION: '0.5.22a',
-			NODE_ADDRESS: 'https://nodes.wavesplatform.com',
+			CLIENT_VERSION: DEI_VERSION,
+			NODE_ADDRESS: DEI_NODE_ADDRESS,
 			COINOMAT_ADDRESS: 'https://coinomat.com',
-			MATCHER_ADDRESS: 'https://matcher.wavesplatform.com',
+			MATCHER_ADDRESS: DEI_MATCHER_ADDRESS,
 			DATAFEED_ADDRESS: 'https://marketdata.wavesplatform.com'
 		}));
 
@@ -122,7 +122,7 @@ function AngularApplicationConfig($provide, $compileProvider, $validatorProvider
 		'optionally starting with \'1W\'');
 
 	$validatorProvider.addMethod('decimal', function (value, element, maxDigits) {
-		maxDigits = angular.isNumber(maxDigits) ? maxDigits : Currency.WAVES.precision;
+		maxDigits = angular.isNumber(maxDigits) ? maxDigits : Currency.BASE.precision;
 		var regex = new RegExp('^(?:-?\\d+)?(?:\\.\\d{0,' + maxDigits + '})?$');
 		return this.optional(element) || regex.test(value);
 	}, 'Amount is expected with a dot (.) as a decimal separator with no more than {0} fraction digits');

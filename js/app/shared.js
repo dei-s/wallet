@@ -71,7 +71,7 @@
 						})
 						.then(apiService.address.balance.bind(apiService.address, self.address))
 						.then(function (response) {
-							self.balances[Currency.WAVES.id] = Money.fromCoins(response.balance, Currency.WAVES);
+							self.balances[Currency.BASE.id] = Money.fromCoins(response.balance, Currency.BASE);
 						});
 				};
 
@@ -280,6 +280,9 @@
 (function () {
 	'use strict';
 
+		if (isMir()) {
+			var spamAssets = {}
+		} else {
 		var spamAssets = {
 			'2udT6qcXrYNdkwAqY8ZLGUJtL9UCno6bWsx5YoHpcnqo': true,
 			'J1yTiGyAd8eJHyZfP8DgNS8mdLgtNx7XFSTVrYPb3jn8': true,
@@ -3585,6 +3588,7 @@
 			'J3MYxiQ7ngAGaK129Ac7fLFfzTosA6YVhzsBeuzk1GXX': true,
 			'2xUpPkiAbgwjCmohcM2bxc2bpzyF77wa1L61BwNcFpbP': true
 		};
+		}
 	var hasBeenUpdated = false; // set this to false to update asset list from github
 	var isPendingUpdate = false;
 	var SPAM_ASSET_LIST_URL = 'https://raw.githubusercontent.com/wavesplatform/waves-community/' +
@@ -4083,8 +4087,8 @@
 		}
 
 		function processPaymentTransaction(transaction) {
-			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.WAVES).formatAmount();
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.BASE).formatAmount();
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processAssetIssueTransaction(transaction) {
@@ -4098,7 +4102,7 @@
 		}
 
 		function processCreateAliasTransaction(transaction) {
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processAssetTransferTransaction(transaction) {
@@ -4109,7 +4113,7 @@
 					currency = asset.currency;
 				}
 			} else {
-				currency = Currency.WAVES;
+				currency = Currency.BASE;
 			}
 
 			if (!currency) {
@@ -4131,16 +4135,16 @@
 		}
 
 		function processStartLeasingTransaction(transaction) {
-			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.WAVES).formatAmount();
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.amount = Money.fromCoins(transaction.amount, Currency.BASE).formatAmount();
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processCancelLeasingTransaction(transaction) {
-			transaction.formatted.asset = Currency.WAVES.displayName;
+			transaction.formatted.asset = Currency.BASE.displayName;
 		}
 
 		function processMassPaymentTransaction(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.assetId;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4171,7 +4175,7 @@
 			}
 
 			transaction.formatted.type = type;
-			transaction.formatted.fee = Money.fromCoins(totalFee, Currency.WAVES).formatAmount(true);
+			transaction.formatted.fee = Money.fromCoins(totalFee, Currency.BASE).formatAmount(true);
 
 			var currency;
 			if (assetId) {
@@ -4180,7 +4184,7 @@
 					currency = asset.currency;
 				}
 			} else {
-				currency = Currency.WAVES;
+				currency = Currency.BASE;
 			}
 
 			if (currency) {
@@ -4190,7 +4194,7 @@
 		}
 
 		function formatFee(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.feeAsset;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4203,7 +4207,7 @@
 		}
 
 		function getFeeAsset(transaction) {
-			var currency = Currency.WAVES;
+			var currency = Currency.BASE;
 			var assetId = transaction.feeAsset;
 			if (assetId) {
 				var asset = applicationContext.cache.assets[assetId];
@@ -4621,7 +4625,7 @@
 (function () {
 	'use strict';
 
-	var FEE_CURRENCY = Currency.WAVES;
+	var FEE_CURRENCY = Currency.BASE;
 	var DEFAULT_ERROR_MESSAGE = 'The Internet connection is lost';
 
 	// TODO : add the `exceptField` attribute or a list of all the needed fields.

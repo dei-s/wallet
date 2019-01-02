@@ -41,18 +41,30 @@
 
 		ctrl.assetsList = [];
 
+		if (isMir()) {
+			ctrl.pair = {
+				amountAsset: Currency.MIR,
+				priceAsset: Currency.LBR
+			};
+		} else {
 		ctrl.pair = {
 			amountAsset: Currency.WAVES,
 			priceAsset: Currency.MIR
 		};
+		}
 
 		emptyDataFields();
 
+		if (isMir()) {
+			var favoritePairs = [
+			];
+		} else {
 		var favoritePairs = [
 			{ amountAsset: Currency.WAVES, priceAsset: Currency.DEIP },
 			{ amountAsset: Currency.WAVES, priceAsset: Currency.LIBRE },
 			{ amountAsset: Currency.WAVES, priceAsset: Currency.MIR }
 		];
+		}
 
 		ctrl.favoritePairs = favoritePairs;
 
@@ -99,7 +111,7 @@
 					orderType: type,
 					amount: Money.fromTokens(amount, ctrl.pair.amountAsset),
 					price: OrderPrice.fromTokens(price, ctrl.pair),
-					fee: Money.fromTokens(fee, Currency.WAVES)
+					fee: Money.fromTokens(fee, Currency.BASE)
 				}, sender)
 				.then(function () {
 					refreshOrderbooks();
