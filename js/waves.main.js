@@ -77,7 +77,7 @@ function AngularApplicationConfig($provide, $compileProvider, $validatorProvider
         }));
     $provide.constant(applicationSettings,
         angular.extend(applicationSettings, {
-            CLIENT_VERSION: '0.5.22a',
+            CLIENT_VERSION: '1.0.0',
             NODE_ADDRESS: 'https://nodes.wavesplatform.com',
             COINOMAT_ADDRESS: 'https://coinomat.com',
             MATCHER_ADDRESS: 'https://matcher.wavesplatform.com',
@@ -176,10 +176,6 @@ function AngularApplicationRun(rest, applicationConstants, notificationService, 
         timeout: 10000 // milliseconds
     });
     var url = applicationConstants.NODE_ADDRESS;
-    //var url = 'http://52.28.66.217:6869';
-    //var url = 'http://52.77.111.219:6869';
-    //var url = 'http://127.0.0.1:6869';
-    //var url = 'http://127.0.0.1:8089';
     rest.setBaseUrl(url);
 
     // override mock methods cos in config phase services are not available yet
