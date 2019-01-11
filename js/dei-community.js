@@ -16,7 +16,7 @@ var app = new Vue({
 		pinnedMessage: {},
 		messages: [],
 		wall: MSG_WALLET_ADDR,
-		node: DEI_NODE_ADDRESS,
+		node: MSG_NODE_ADDRESS,
 		amount: '0.01',
 		fee: '0.001',
 		minAmount: MSG_AMOUNT_MIN,
