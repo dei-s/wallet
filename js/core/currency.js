@@ -98,7 +98,7 @@ var Currency = (function () {
 
 		var DEIP = new Currency({
 			id: '8Wj49jM8y9qfFx2QG6HxQXbiaxdnTt8EGm8mEqXJWFL4',
-			displayName: 'Platform',
+			displayName: 'DEIP',
 			shortName: 'DEIP',
 			precision: 2,
 			verified: true
