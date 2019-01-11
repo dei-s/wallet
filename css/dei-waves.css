@@ -276,10 +276,37 @@ md-autocomplete.fee-autocomplete button:hover md-icon path{fill:#fff}
 	0%{transform:rotateY(0deg)}
 	to{transform:rotateY(360deg)}
 }
-#bg-spin{position:fixed;width:100%;height:100%;background: #FFFFFF;z-index:1;}
-#logoo{width:150px;height:150px;text-align:center}
-#logo-spin{animation:b 2.3s ease-in infinite}
-#networkCheck{width:100%;color: #333333;font-family:Roboto;font-weight:200;font-size:20px;font-size:1.25rem;margin-top:16px;margin-top:1rem;}
+
+/* LOADER */
+
+#bg-spin{
+	position:fixed;
+	width:100%;
+	height:100%;
+	background:#FFFFFF;
+	z-index:1;
+}
+#logoo{
+	width:150px;
+	height:150px;
+	text-align:center;
+}
+#logo-spin{
+	animation:b 2.3s ease-in infinite;
+}
+#networkCheck{
+	width:100%;
+	color:#333333;
+	font-family:Roboto;
+	font-weight:200;
+	font-size:20px;
+	font-size:1.25rem;
+	margin-top:16px;
+	margin-top:1rem;
+}
+
+/* lockscreen */
+
 #lockscreen{
 	background:linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5)),url(../img/bg.jpg) no-repeat fixed 50%;
 	background-size:cover;
