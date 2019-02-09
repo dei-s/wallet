@@ -38,6 +38,10 @@
 				image: 'wB-bg-MIR-purple.svg',
 				displayName: Currency.MIR.displayName
 			};
+			mapping[Currency.LBR.displayName] = {
+				image: 'wB-bg-LBR.svg',
+				displayName: Currency.LBR.displayName
+			};
 		} else {
 			mapping[Currency.WAVES.displayName] = {
 				image: 'wB-bg-WAV.svg',
@@ -626,7 +630,7 @@
 			}).then(function (depositDetails) {
 				notPermittedBitcoinAddresses[depositDetails.address] = 1;
 				if (isMir()) {
-					return coinomatService.getDepositDetails(Currency.BTC, Currency.WAVES,
+					return coinomatService.getDepositDetails(Currency.LBR, Currency.MIR,
 						applicationContext.account.address);
 				} else {
 					return coinomatService.getDepositDetails(Currency.BTC, Currency.WAVES,
@@ -763,7 +767,7 @@
 	var DEFAULT_ERROR_MESSAGE = 'Connection is lost';
 
 	function WalletDepositController($scope, events, coinomatService, dialogService, notificationService,
-		applicationContext, bitcoinUriService, utilsService, $element) {
+		applicationContext, utilsService, $element) {
 
 		var ctrl = this;
 		var currencyId = Currency[$element.data('currency')].id;
@@ -790,13 +794,14 @@
 		};
 
 		ctrl.refreshBTCUri = function () {
+			if (isMir()) return;
 			var params = null;
 			if (ctrl.btc.bitcoinAmount >= ctrl.btc.minimumAmount) {
 				params = {
 					amount: ctrl.btc.bitcoinAmount
 				};
 			}
-			ctrl.btc.bitcoinUri = bitcoinUriService.generate(ctrl.btc.bitcoinAddress, params);
+			ctrl.btc.bitcoinUri = generateUri(ctrl.btc.bitcoinAddress, params);
 		};
 
 		ctrl.refreshLbrUri = function () {
@@ -806,7 +811,7 @@
 					amount: ctrl.lbr.lbrAmount
 				};
 			}
-			ctrl.lbr.lbrUri = lbrUriService.generate(ctrl.lbr.lbrAddress, params);
+			ctrl.lbr.lbrUri = generateUri(ctrl.lbr.lbrAddress, params);
 		};
 
 		$scope.$on(events.WALLET_DEPOSIT + currencyId, function (event, eventData) {
@@ -843,12 +848,13 @@
 		}
 
 		function depositBTC() {
+			if (isMir()) return;
 			coinomatService.getDepositDetails(ctrl.depositWith, ctrl.assetBalance.currency,
 				applicationContext.account.address)
 				.then(function (depositDetails) {
 					dialogService.open('#deposit-btc-dialog');
 					ctrl.btc.bitcoinAddress = depositDetails.address;
-					ctrl.btc.bitcoinUri = bitcoinUriService.generate(ctrl.btc.bitcoinAddress);
+					ctrl.btc.bitcoinUri = generateUri(ctrl.btc.bitcoinAddress);
 				})
 				.catch(catchErrorMessage);
 		}
@@ -859,7 +865,7 @@
 				.then(function (depositDetails) {
 					dialogService.open('#deposit-lbr-dialog');
 					ctrl.lbr.lbrAddress = depositDetails.address;
-					ctrl.lbr.lbrUri = lbrUriService.generate(ctrl.lbr.lbrAddress);
+					ctrl.lbr.lbrUri = generateUri(ctrl.lbr.lbrAddress);
 				})
 				.catch(catchErrorMessage);
 		}
@@ -875,7 +881,7 @@
 
 	WalletDepositController.$inject = [
 		'$scope', 'wallet.events', 'coinomatService', 'dialogService', 'notificationService',
-		'applicationContext', 'bitcoinUriService', 'utilsService', '$element'
+		'applicationContext', 'utilsService', '$element'
 	];
 
 	angular
