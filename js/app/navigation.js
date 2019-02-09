@@ -43,11 +43,10 @@
 (function () {
 	'use strict';
 
-	function MainMenuController($scope, $interval, events, applicationContext,
-			cryptoService, dialogService, notificationService, apiService) {
-		var ctrl = this,
-			refreshPromise,
-			delayRefresh = 10 * 1000;
+	function MainMenuController($scope, $interval, events, applicationContext, cryptoService, dialogService, notificationService, apiService) {
+		var ctrl = this;
+		var refreshPromise;
+		var delayRefresh = 10 * 1000;
 
 		ctrl.blockHeight = 0;
 		ctrl.address = applicationContext.account.address;
@@ -125,8 +124,7 @@
 		}
 	}
 
-	MainMenuController.$inject = ['$scope', '$interval', 'navigation.events', 'applicationContext',
-			'cryptoService', 'dialogService', 'notificationService', 'apiService'];
+	MainMenuController.$inject = ['$scope', '$interval', 'navigation.events', 'applicationContext', 'cryptoService', 'dialogService', 'notificationService', 'apiService'];
 
 	angular
 		.module('app.navigation')
@@ -140,9 +138,7 @@
 	var ALIAS_MINIMUM_LENGTH = 4;
 	var ALIAS_MAXIMUM_LENGTH = 30;
 
-	function CreateAliasController($scope, $timeout, events, applicationContext,
-			dialogService, notificationService, transactionBroadcast,
-			formattingService, aliasRequestService, apiService) {
+	function CreateAliasController($scope, $timeout, events, applicationContext, dialogService, notificationService, transactionBroadcast, formattingService, aliasRequestService, apiService) {
 		var ctrl = this;
 
 		ctrl.fee = DEFAULT_FEE;
@@ -224,9 +220,7 @@
 		}
 	}
 
-	CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext',
-			'dialogService', 'notificationService', 'transactionBroadcast',
-			'formattingService', 'aliasRequestService', 'apiService'];
+	CreateAliasController.$inject = ['$scope', '$timeout', 'navigation.events', 'applicationContext', 'dialogService', 'notificationService', 'transactionBroadcast', 'formattingService', 'aliasRequestService', 'apiService'];
 
 	angular
 		.module('app.navigation')
