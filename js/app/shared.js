@@ -37,11 +37,17 @@
 
 	// TODO : move to the future `appState` service.
 
+	if (isMir()) {
+		var predefinedAssets = [
+			Currency.LBR
+		];
+	} else {
 	var predefinedAssets = [
 		Currency.BTC,
 		Currency.USD,
 		Currency.EUR
 	];
+	}
 
 	angular
 		.module('app.shared')
