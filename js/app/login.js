@@ -1,19 +1,3 @@
-/******************************************************************************
- * Copyright © 2016 The Waves Developers.                                     *
- *                                                                            *
- * See the LICENSE files at                                                   *
- * the top-level directory of this distribution for the individual copyright  *
- * holder information and the developer policies on copyright and licensing.  *
- *                                                                            *
- * Unless otherwise agreed in a custom licensing agreement, no part of the    *
- * Waves software, including this file, may be copied, modified, propagated,  *
- * or distributed except according to the terms contained in the LICENSE      *
- * file.                                                                      *
- *                                                                            *
- * Removal or modification of this copyright notice is prohibited.            *
- *                                                                            *
- ******************************************************************************/
-
 (function() {
 	'use strict';
 
@@ -315,8 +299,7 @@
 
 	var SEED_MINIMUM_LENGTH = 25;
 
-	function AccountSeedController($scope, loginContext, utilityService,
-								   cryptoService, dialogService, passPhraseService) {
+	function AccountSeedController($scope, loginContext, utilityService, cryptoService, dialogService, passPhraseService) {
 		var vm = this;
 
 		vm.validationOptions = {
@@ -396,7 +379,7 @@
 (function () {
 	'use strict';
 
-	function AccountLoginController ($scope, cryptoService, loginContext, notificationService) {
+	function AccountLoginController($scope, cryptoService, loginContext, notificationService) {
 		var vm = this;
 
 		vm.signIn = signIn;
@@ -439,3 +422,19 @@
 		.module('app.login')
 		.controller('accountLoginController', AccountLoginController);
 })();
+
+/******************************************************************************
+ * Copyright © 2016 The Waves Developers.                                     *
+ *                                                                            *
+ * See the LICENSE files at                                                   *
+ * the top-level directory of this distribution for the individual copyright  *
+ * holder information and the developer policies on copyright and licensing.  *
+ *                                                                            *
+ * Unless otherwise agreed in a custom licensing agreement, no part of the    *
+ * Waves software, including this file, may be copied, modified, propagated,  *
+ * or distributed except according to the terms contained in the LICENSE      *
+ * file.                                                                      *
+ *                                                                            *
+ * Removal or modification of this copyright notice is prohibited.            *
+ *                                                                            *
+ ******************************************************************************/
