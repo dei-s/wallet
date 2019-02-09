@@ -1,24 +1,8 @@
-/******************************************************************************
- * Copyright © 2016 The Waves Core Developers.                                *
- *                                                                            *
- * See the LICENSE.txt files at                                               *
- * the top-level directory of this distribution for the individual copyright  *
- * holder information and the developer policies on copyright and licensing.  *
- *                                                                            *
- * Unless otherwise agreed in a custom licensing agreement, no part of the    *
- * Waves software, including this file, may be copied, modified, propagated,  *
- * or distributed except according to the terms contained in the LICENSE.txt  *
- * file.                                                                      *
- *                                                                            *
- * Removal or modification of this copyright notice is prohibited.            *
- *                                                                            *
- ******************************************************************************/
-
 (function ($, window) {
 	'use strict';
 
-	var $wrapW = $('#wrapper').width(),
-		$mbBodyH = $('#mainBody').height();
+	var $wrapW = $('#wrapper').width();
+	var $mbBodyH = $('#mainBody').height();
 
 	// GUI elements dynamic sizing and LeftBar visibility
 	$(window).on('load resize', function (e) {
@@ -61,12 +45,10 @@ var app = angular.module('app', [
 	'app.tokens',
 	'app.dex',
 	'app.history',
-	'app.community',
 	'app.portfolio'
 ]).config(AngularApplicationConfig).run(AngularApplicationRun);
 
-function AngularApplicationConfig($provide, $compileProvider, $validatorProvider, $qProvider,
-		$sceDelegateProvider, $mdAriaProvider, networkConstants, applicationSettings) {
+function AngularApplicationConfig($provide, $compileProvider, $validatorProvider, $qProvider, $sceDelegateProvider, $mdAriaProvider, networkConstants, applicationSettings) {
 	'use strict';
 
 	$provide.constant(networkConstants,
@@ -175,10 +157,6 @@ function AngularApplicationRun(rest, applicationConstants, notificationService, 
 		timeout: 10000 // milliseconds
 	});
 	var url = applicationConstants.NODE_ADDRESS;
-	//var url = 'http://52.28.66.217:6869';
-	//var url = 'http://52.77.111.219:6869';
-	//var url = 'http://127.0.0.1:6869';
-	//var url = 'http://127.0.0.1:8089';
 	rest.setBaseUrl(url);
 
 	// override mock methods cos in config phase services are not available yet
@@ -191,3 +169,19 @@ function AngularApplicationRun(rest, applicationConstants, notificationService, 
 }
 
 AngularApplicationRun.$inject = ['Restangular', 'constants.application', 'notificationService', 'addressService'];
+
+/******************************************************************************
+ * Copyright © 2016 The Waves Core Developers.                                *
+ *                                                                            *
+ * See the LICENSE.txt files at                                               *
+ * the top-level directory of this distribution for the individual copyright  *
+ * holder information and the developer policies on copyright and licensing.  *
+ *                                                                            *
+ * Unless otherwise agreed in a custom licensing agreement, no part of the    *
+ * Waves software, including this file, may be copied, modified, propagated,  *
+ * or distributed except according to the terms contained in the LICENSE.txt  *
+ * file.                                                                      *
+ *                                                                            *
+ * Removal or modification of this copyright notice is prohibited.            *
+ *                                                                            *
+ ******************************************************************************/
